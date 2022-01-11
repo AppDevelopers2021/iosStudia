@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NoteDetailsView: View {
-    var selectedNote: Note
+
     
     var body: some View {
         Text("hi")
@@ -25,6 +25,6 @@ struct NoteDetailsView: View {
 
 struct NoteDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        NoteDetailsView(selectedNote: testData[0])
+        NoteDetailsView()
     }
 }

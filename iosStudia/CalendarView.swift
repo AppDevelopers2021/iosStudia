@@ -9,14 +9,22 @@ import SwiftUI
 import Firebase
 import GoogleSignIn
 
+struct Note : Identifiable {
+    var id = UUID()
+    var idx: Int
+    var subject: String
+    var content: String
+}
+
 struct CalendarView: View {
     @State var selectedDate: Date = Date()
     @State var isPickerOpen: Bool = false
-    @State var memo = "Lorem Ipsum Dolor Sit Amet"
-    @State var reminders = "Consectetur Adipiscing Elit"
+    @State var memo = ""
+    @State var reminders = ""
+    @State var notes: [Note] = []
     
     var showValue: String = ""
-    var notes: [Note] = testData
+    
     
     let formatDisplay: DateFormatter = {
         let formatter = DateFormatter()
@@ -30,15 +38,34 @@ struct CalendarView: View {
     }()
     
     func load() {
-        // Fetch Data from DB
         guard let uid = Auth.auth().currentUser?.uid else { return }
         Database.database().reference().child("calendar/\(uid)/\(formatForDB.string(from: selectedDate))").observe(DataEventType.value, with: { snapshot in
-            // parse
+            if let fetchedData = snapshot.value as? NSDictionary {
+                // Show notes
+                if let fetchedNotes = fetchedData["note"] as? NSArray {
+                    var noteList: [Note] = []
+                    for i in 0..<fetchedNotes.count {
+                        let currentNote = fetchedNotes[i] as! NSDictionary
+                        noteList.append(Note(idx: i, subject: currentNote["subject"] as! String, content: currentNote["content"] as! String))
+                    }
+                    self.notes = noteList
+                } else { self.notes = [] }
+                
+                // Show memo
+                if let fetchedMemo = fetchedData["memo"] as? String {
+                    self.memo = fetchedMemo
+                } else { self.memo = "" }
+                
+                // Show reminders
+                if let fetchedReminderArray = fetchedData["reminder"] as? NSArray {
+                    self.reminders = " • " + fetchedReminderArray.map({"\($0)"}).joined(separator: "\n • ")
+                } else { self.reminders = "" }
+            } else {
+                self.notes = []
+                self.memo = ""
+                self.reminders = ""
+            }
         });
-    }
-    
-    init() {
-        load()
     }
     
     var body: some View {
@@ -51,6 +78,8 @@ struct CalendarView: View {
                             // Date Navigation
                             Button(action: {
                                 // Date Back
+                                selectedDate -= 86400
+                                load()
                             }) {
                                 Image(systemName: "chevron.left")
                                     .foregroundColor(Color("TextColor"))
@@ -67,6 +96,8 @@ struct CalendarView: View {
                             }
                             Button(action: {
                                 // Date Forward
+                                selectedDate += 86400
+                                load()
                             }) {
                                 Image(systemName: "chevron.right")
                                     .foregroundColor(Color("TextColor"))
@@ -88,21 +119,25 @@ struct CalendarView: View {
                                 .datePickerStyle(WheelDatePickerStyle())
                                 .labelsHidden()
                                 .transition(.scale)
+                                .onChange(of: selectedDate, perform: { _newValue in
+                                    load()
+                                })
                         }
                         
                         VStack {
                             ForEach(notes) { note in
-                                NavigationLink(destination: NoteDetailsView(selectedNote: note)) {
+                                NavigationLink(destination: NoteDetailsView()) {
                                     HStack(alignment: .center, spacing: 10) {
                                         Text(note.subject)
                                             .frame(width: 35, height:35)
                                             .foregroundColor(Color.white)
                                             .background(Color.purple)
                                             .font(.system(size: 15))
-                                            .cornerRadius(8)
+                                            .cornerRadius(10)
                                         
                                         Text(note.content)
                                             .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                            .multilineTextAlignment(.leading)
                                     }
                                     .padding(7)
                                     .foregroundColor(Color("TextColor"))
@@ -111,7 +146,7 @@ struct CalendarView: View {
                                 }
                             }
                         }
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 150, alignment: .leading)
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 150, alignment: .topLeading)
                         .padding(10)
                         .overlay(
                             RoundedRectangle(cornerRadius: 15)
@@ -143,6 +178,7 @@ struct CalendarView: View {
                                     .foregroundColor(Color("TextColor"))
                                     .font(.system(size: 20))
                                     .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                    .multilineTextAlignment(.leading)
                             }
                             .padding([.vertical], 15)
                         }
@@ -161,6 +197,8 @@ struct CalendarView: View {
                         navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
                         navigationBarAppearance.backgroundColor = UIColor(Color("ThemeColor"))
                         navigationBarAppearance.barTintColor = UIColor(Color("ThemeColor"))
+
+                        load()
                     }
                 }
             }
