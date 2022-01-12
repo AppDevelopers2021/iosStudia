@@ -118,7 +118,8 @@ struct CalendarView: View {
                                     .padding(.trailing, 10)
                             }
                             .sheet(isPresented: self.$showModal) {
-                                AddCalendarModalView()
+                                
+                                AddCalendarModalView(idx: notes.count, date: formatForDB.string(from: selectedDate))
                             }
                         }
                         
@@ -214,13 +215,42 @@ struct CalendarView: View {
 }
 
 struct AddCalendarModalView: View {
+    @State var idx: Int
+    @State var date: String
+    
+    @State private var selectedSubject: String = "국어"
+    @State private var selectedOptionalSubject: String = ""
+    @State private var inputContent: String = ""
+    let subjects = ["가정", "과학", "국어", "기술", "도덕", "독서", "미술", "보건", "사회", "수학", "영어", "음악", "정보", "진로", "창체", "체육", "환경", "자율", "기타"]
+    
     @Environment (\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
         Group {
             NavigationView {
                 VStack {
-                    // Do Something Wonderful!
+                    Form {
+                        Section(header: Text("과목"), content: {
+                            Picker("과목 선택", selection: $selectedSubject) {
+                                ForEach(subjects, id: \.self) { option in
+                                    Text(option)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .accentColor(.black)
+                            .padding(.trailing, 50)
+                            
+                            if selectedSubject == "기타" {
+                                TextField("직접 입력", text: $selectedOptionalSubject)
+                                    .accentColor(.blue)
+                            }
+                        })
+                        
+                        Section(header: Text("내용"), content: {
+                            TextField("내용 입력", text: $inputContent)
+                                .accentColor(.blue)
+                        })
+                    }
                 }
                 .navigationTitle("노트 추가")
                 .navigationBarTitleDisplayMode(.inline)
@@ -235,7 +265,13 @@ struct AddCalendarModalView: View {
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
-                            // Add Note
+                            guard let uid = Auth.auth().currentUser?.uid else { return }
+                            if selectedSubject == "기타" {
+                                Database.database().reference().child("calendar/\(uid)/\(date)/note/\(idx)").setValue(["subject": selectedOptionalSubject, "content": inputContent])
+                            } else {
+                                Database.database().reference().child("calendar/\(uid)/\(date)/note/\(idx)").setValue(["subject": selectedSubject, "content": inputContent])
+                            }
+                            self.presentationMode.wrappedValue.dismiss()
                         }) {
                             Text("완료")
                         }
