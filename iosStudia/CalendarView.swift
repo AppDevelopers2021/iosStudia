@@ -17,11 +17,12 @@ struct Note : Identifiable {
 }
 
 struct CalendarView: View {
-    @State var selectedDate: Date = Date()
-    @State var isPickerOpen: Bool = false
-    @State var memo = ""
-    @State var reminders = ""
-    @State var notes: [Note] = []
+    @State var selectedDate: Date = Date()  // Date selected from date picker
+    @State var isPickerOpen: Bool = false   // Used to show & hide date picker
+    @State var memo = ""                    // Memo value to display
+    @State var reminders = ""               // Reminders to display
+    @State var notes: [Note] = []           // Notes to display
+    @State private var showModal = false    // Show "Add Note" Modal
     
     var showValue: String = ""
     
@@ -71,7 +72,9 @@ struct CalendarView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color("ThemeColor").ignoresSafeArea()
+                Color("ThemeColor")
+                    .edgesIgnoringSafeArea(.top)
+                Color("BgColor")
                 ScrollView() {
                     VStack(spacing: 15) {
                         HStack {
@@ -106,11 +109,16 @@ struct CalendarView: View {
                             }
                             Spacer()
                             
-                            NavigationLink(destination: LoginView()) {
+                            Button(action: {
+                                self.showModal = true
+                            }) {
                                 Image(systemName: "plus.circle")
                                     .foregroundColor(Color("TextColor"))
                                     .font(.system(size: 25))
                                     .padding(.trailing, 10)
+                            }
+                            .sheet(isPresented: self.$showModal) {
+                                AddCalendarModalView()
                             }
                         }
                         
@@ -185,8 +193,6 @@ struct CalendarView: View {
                         .padding(10)
                         .background(Color("HighlightBgColor"))
                         .cornerRadius(10)
-                        
-                        Spacer()
                     }
                     .padding()
                     .background(Color("BgColor"))
@@ -197,13 +203,47 @@ struct CalendarView: View {
                         navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
                         navigationBarAppearance.backgroundColor = UIColor(Color("ThemeColor"))
                         navigationBarAppearance.barTintColor = UIColor(Color("ThemeColor"))
-
+                        
                         load()
                     }
                 }
             }
         }
         .accentColor(.white)
+    }
+}
+
+struct AddCalendarModalView: View {
+    @Environment (\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
+    var body: some View {
+        Group {
+            NavigationView {
+                VStack {
+                    // Do Something Wonderful!
+                }
+                .navigationTitle("노트 추가")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
+                            self.presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Text("취소")
+                        }
+                    }
+                    
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            // Add Note
+                        }) {
+                            Text("완료")
+                        }
+                    }
+                }
+            }
+            .accentColor(.white)
+        }
     }
 }
 
