@@ -91,7 +91,9 @@ struct CalendarView: View {
                             }
                             Button(action: {
                                 // Open & close the date picker
-                                isPickerOpen.toggle()
+                                withAnimation(Animation.easeInOut(duration: 0.3)) {
+                                    isPickerOpen.toggle()
+                                }
                             }) {
                                 Text(formatDisplay.string(from: selectedDate))
                                     .foregroundColor(Color("TextColor"))
@@ -127,7 +129,6 @@ struct CalendarView: View {
                             DatePicker("날짜 선택", selection: $selectedDate, displayedComponents: .date)
                                 .datePickerStyle(WheelDatePickerStyle())
                                 .labelsHidden()
-                                .transition(.scale)
                                 .onChange(of: selectedDate, perform: { _newValue in
                                     load()
                                 })
@@ -156,6 +157,7 @@ struct CalendarView: View {
                             }
                         }
                         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 150, alignment: .topLeading)
+                        .background(Color("BgColor"))
                         .padding(10)
                         .overlay(
                             RoundedRectangle(cornerRadius: 15)
