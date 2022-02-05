@@ -9,7 +9,7 @@ import SwiftUI
 import Firebase
 import GoogleSignIn
 
-struct Note : Identifiable {
+struct Note: Identifiable {
     var id = UUID()
     var idx: Int
     var subject: String
@@ -21,10 +21,9 @@ struct CalendarView: View {
     @State var isPickerOpen: Bool = false   // Used to show & hide date picker
     @State var memo = ""                    // Memo value to display
     @State var reminders = ""               // Reminders to display
+    @State var reminderArray: NSArray = []  // Array of reminders (to pass to ReminderDetailsView
     @State var notes: [Note] = []           // Notes to display
     @State private var showModal = false    // Show "Add Note" Modal
-    
-    var showValue: String = ""
     
     
     let formatDisplay: DateFormatter = {
@@ -59,6 +58,7 @@ struct CalendarView: View {
                 
                 // Show reminders
                 if let fetchedReminderArray = fetchedData["reminder"] as? NSArray {
+                    self.reminderArray = fetchedReminderArray
                     self.reminders = " • " + fetchedReminderArray.map({"\($0)"}).joined(separator: "\n • ")
                 } else { self.reminders = "" }
             } else {
@@ -164,7 +164,7 @@ struct CalendarView: View {
                                 .stroke(Color("ThemeColor"), style: StrokeStyle(lineWidth: 3, dash: [11]))
                         )
                         
-                        NavigationLink(destination: Text("Memo Edit Page")) {
+                        NavigationLink(destination: MemoDetailsView(memoContent: memo, date: selectedDate)) {
                             VStack(alignment: .leading, spacing: 10) {
                                 Text("메모")
                                     .foregroundColor(Color("TextColor"))
@@ -180,7 +180,7 @@ struct CalendarView: View {
                         .background(Color("HighlightBgColor"))
                         .cornerRadius(10)
                         
-                        NavigationLink(destination: Text("Reminder Edit Page")) {
+                        NavigationLink(destination: ReminderDetailsView(reminderContent: reminderArray, date: selectedDate)) {
                             VStack(alignment: .leading, spacing: 10) {
                                 Text("과제 및 준비물")
                                     .foregroundColor(Color("TextColor"))

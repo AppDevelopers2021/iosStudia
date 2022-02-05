@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0108D04327ABBD1D00B2D46C /* ReminderDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0108D04227ABBD1D00B2D46C /* ReminderDetailsView.swift */; };
 		011A40DF2786738500A9264D /* iosStudiaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011A40DE2786738500A9264D /* iosStudiaApp.swift */; };
 		011A40E12786738500A9264D /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011A40E02786738500A9264D /* CalendarView.swift */; };
 		011A40E32786738600A9264D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 011A40E22786738600A9264D /* Assets.xcassets */; };
 		011A40E62786738600A9264D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 011A40E52786738600A9264D /* Preview Assets.xcassets */; };
-		011A40ED2786764A00A9264D /* Courgette.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 011A40EC2786763300A9264D /* Courgette.ttf */; };
 		01BAA3DF27883634003A6499 /* NoteDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BAA3DE27883634003A6499 /* NoteDetailsView.swift */; };
 		01D253CD2786FB9800A71317 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 01D253CC2786FB9800A71317 /* GoogleSignIn */; };
 		01D253CF2787161900A71317 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 01D253CE2787161900A71317 /* Settings.bundle */; };
-		01D253D12787BC6200A71317 /* MemoEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D253D02787BC6200A71317 /* MemoEditView.swift */; };
+		01D253D12787BC6200A71317 /* MemoDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D253D02787BC6200A71317 /* MemoDetailsView.swift */; };
 		01F401CC2786873F00FEC7F6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 01F401CB2786873F00FEC7F6 /* GoogleService-Info.plist */; };
 		01F401CF2786884200FEC7F6 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 01F401CE2786884200FEC7F6 /* FirebaseAnalytics */; };
 		01F401D12786884200FEC7F6 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 01F401D02786884200FEC7F6 /* FirebaseAuth */; };
@@ -27,16 +27,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0108D04227ABBD1D00B2D46C /* ReminderDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDetailsView.swift; sourceTree = "<group>"; };
 		011A40DB2786738500A9264D /* iosStudia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosStudia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		011A40DE2786738500A9264D /* iosStudiaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iosStudiaApp.swift; sourceTree = "<group>"; };
 		011A40E02786738500A9264D /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		011A40E22786738600A9264D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		011A40E52786738600A9264D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		011A40EC2786763300A9264D /* Courgette.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Courgette.ttf; sourceTree = "<group>"; };
 		011A40EE2786771A00A9264D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		01BAA3DE27883634003A6499 /* NoteDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDetailsView.swift; sourceTree = "<group>"; };
 		01D253CE2787161900A71317 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
-		01D253D02787BC6200A71317 /* MemoEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoEditView.swift; sourceTree = "<group>"; };
+		01D253D02787BC6200A71317 /* MemoDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoDetailsView.swift; sourceTree = "<group>"; };
 		01F401CB2786873F00FEC7F6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		01F401D927868BE000FEC7F6 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		01F401DB27868CB900FEC7F6 /* NanumSquare_acB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquare_acB.ttf; sourceTree = "<group>"; };
@@ -84,8 +84,8 @@
 				01F401D927868BE000FEC7F6 /* LoginView.swift */,
 				011A40E02786738500A9264D /* CalendarView.swift */,
 				01BAA3DE27883634003A6499 /* NoteDetailsView.swift */,
-				01D253D02787BC6200A71317 /* MemoEditView.swift */,
-				011A40EC2786763300A9264D /* Courgette.ttf */,
+				01D253D02787BC6200A71317 /* MemoDetailsView.swift */,
+				0108D04227ABBD1D00B2D46C /* ReminderDetailsView.swift */,
 				01F401DB27868CB900FEC7F6 /* NanumSquare_acB.ttf */,
 				011A40E22786738600A9264D /* Assets.xcassets */,
 				01D253CE2787161900A71317 /* Settings.bundle */,
@@ -172,7 +172,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				011A40ED2786764A00A9264D /* Courgette.ttf in Resources */,
 				01F401CC2786873F00FEC7F6 /* GoogleService-Info.plist in Resources */,
 				011A40E62786738600A9264D /* Preview Assets.xcassets in Resources */,
 				011A40E32786738600A9264D /* Assets.xcassets in Resources */,
@@ -188,7 +187,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01D253D12787BC6200A71317 /* MemoEditView.swift in Sources */,
+				01D253D12787BC6200A71317 /* MemoDetailsView.swift in Sources */,
+				0108D04327ABBD1D00B2D46C /* ReminderDetailsView.swift in Sources */,
 				01F401DA27868BE000FEC7F6 /* LoginView.swift in Sources */,
 				011A40E12786738500A9264D /* CalendarView.swift in Sources */,
 				011A40DF2786738500A9264D /* iosStudiaApp.swift in Sources */,

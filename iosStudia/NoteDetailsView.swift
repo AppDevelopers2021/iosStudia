@@ -11,6 +11,7 @@ struct NoteDetailsView: View {
     @State var isInEditMode: Bool = false
     @State var editSubject: String = ""
     @State var editContent: String = ""
+    let subjects = ["가정", "과학", "국어", "기술", "도덕", "독서", "미술", "보건", "사회", "수학", "영어", "음악", "정보", "진로", "창체", "체육", "환경", "자율", "기타"]
     
     var selectedNote: Note
     
@@ -20,10 +21,24 @@ struct NoteDetailsView: View {
                 .edgesIgnoringSafeArea(.top)
             Color("BgColor")
             VStack {
-                TextEditor(text: $editContent)
+                if isInEditMode {
+                    // Edit Options
+                    Picker("과목 선택", selection: $editSubject) {
+                        ForEach(subjects, id: \.self) { option in
+                            Text(option)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                    .accentColor(.black)
+                    TextField("", text: $editContent)
+                } else {
+                    // Show Plain Text
+                    Text(selectedNote.content)
+                }
             }
             .navigationTitle("노트")
             .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(isInEditMode)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     if isInEditMode {
@@ -36,9 +51,11 @@ struct NoteDetailsView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        isInEditMode.toggle()
+                        withAnimation {
+                            isInEditMode.toggle()
+                        }
                     }) {
-                        if isInEditMode == true {
+                        if isInEditMode {
                             Text("완료")
                         } else {
                             Text("수정")
