@@ -136,7 +136,7 @@ struct CalendarView: View {
                         
                         VStack {
                             ForEach(notes) { note in
-                                NavigationLink(destination: NoteDetailsView(selectedNote: note)) {
+                                NavigationLink(destination: NoteDetailsView(selectedNote: note, date: selectedDate)) {
                                     HStack(alignment: .center, spacing: 10) {
                                         Text(note.subject)
                                             .frame(width: 35, height:35)

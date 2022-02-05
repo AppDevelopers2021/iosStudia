@@ -78,7 +78,7 @@ struct MemoDetailsView: View {
                                 self.fieldIsFocused = true
                             }
                         }) {
-                            Text("수정")
+                            Text("편집")
                         }
                     }
                 }
