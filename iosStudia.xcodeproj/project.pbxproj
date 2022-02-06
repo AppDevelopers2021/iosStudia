@@ -12,6 +12,11 @@
 		011A40E12786738500A9264D /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011A40E02786738500A9264D /* CalendarView.swift */; };
 		011A40E32786738600A9264D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 011A40E22786738600A9264D /* Assets.xcassets */; };
 		011A40E62786738600A9264D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 011A40E52786738600A9264D /* Preview Assets.xcassets */; };
+		014D053027AE6CBE008AD625 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 014D051727AE6B7A008AD625 /* WidgetKit.framework */; };
+		014D053127AE6CBE008AD625 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 014D051927AE6B7A008AD625 /* SwiftUI.framework */; };
+		014D053427AE6CBE008AD625 /* studiaWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014D053327AE6CBE008AD625 /* studiaWidgets.swift */; };
+		014D053627AE6CBF008AD625 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 014D053527AE6CBF008AD625 /* Assets.xcassets */; };
+		014D053A27AE6CBF008AD625 /* studiaWidgetsExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 014D052F27AE6CBE008AD625 /* studiaWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		01BAA3DF27883634003A6499 /* NoteDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BAA3DE27883634003A6499 /* NoteDetailsView.swift */; };
 		01D253CD2786FB9800A71317 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 01D253CC2786FB9800A71317 /* GoogleSignIn */; };
 		01D253CF2787161900A71317 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 01D253CE2787161900A71317 /* Settings.bundle */; };
@@ -26,14 +31,45 @@
 		01F401DC27868CB900FEC7F6 /* NanumSquare_acB.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 01F401DB27868CB900FEC7F6 /* NanumSquare_acB.ttf */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		014D053827AE6CBF008AD625 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 011A40D32786738500A9264D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 014D052E27AE6CBE008AD625;
+			remoteInfo = studiaWidgetsExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		014D052727AE6B7B008AD625 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				014D053A27AE6CBF008AD625 /* studiaWidgetsExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		0108D04227ABBD1D00B2D46C /* ReminderDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDetailsView.swift; sourceTree = "<group>"; };
+		01128FA127AF889D00ED47FC /* iosStudia.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iosStudia.entitlements; sourceTree = "<group>"; };
 		011A40DB2786738500A9264D /* iosStudia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosStudia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		011A40DE2786738500A9264D /* iosStudiaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iosStudiaApp.swift; sourceTree = "<group>"; };
 		011A40E02786738500A9264D /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		011A40E22786738600A9264D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		011A40E52786738600A9264D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		011A40EE2786771A00A9264D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		014D051727AE6B7A008AD625 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		014D051927AE6B7A008AD625 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		014D052F27AE6CBE008AD625 /* studiaWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = studiaWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		014D053327AE6CBE008AD625 /* studiaWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = studiaWidgets.swift; sourceTree = "<group>"; };
+		014D053527AE6CBF008AD625 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		014D053727AE6CBF008AD625 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		01BAA3DE27883634003A6499 /* NoteDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDetailsView.swift; sourceTree = "<group>"; };
 		01D253CE2787161900A71317 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		01D253D02787BC6200A71317 /* MemoDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoDetailsView.swift; sourceTree = "<group>"; };
@@ -56,6 +92,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		014D052C27AE6CBE008AD625 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				014D053127AE6CBE008AD625 /* SwiftUI.framework in Frameworks */,
+				014D053027AE6CBE008AD625 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -63,6 +108,8 @@
 			isa = PBXGroup;
 			children = (
 				011A40DD2786738500A9264D /* iosStudia */,
+				014D053227AE6CBE008AD625 /* studiaWidgets */,
+				014D051627AE6B7A008AD625 /* Frameworks */,
 				011A40DC2786738500A9264D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -71,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				011A40DB2786738500A9264D /* iosStudia.app */,
+				014D052F27AE6CBE008AD625 /* studiaWidgetsExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -78,6 +126,7 @@
 		011A40DD2786738500A9264D /* iosStudia */ = {
 			isa = PBXGroup;
 			children = (
+				01128FA127AF889D00ED47FC /* iosStudia.entitlements */,
 				011A40EE2786771A00A9264D /* Info.plist */,
 				01F401CB2786873F00FEC7F6 /* GoogleService-Info.plist */,
 				011A40DE2786738500A9264D /* iosStudiaApp.swift */,
@@ -102,6 +151,25 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		014D051627AE6B7A008AD625 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				014D051727AE6B7A008AD625 /* WidgetKit.framework */,
+				014D051927AE6B7A008AD625 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		014D053227AE6CBE008AD625 /* studiaWidgets */ = {
+			isa = PBXGroup;
+			children = (
+				014D053327AE6CBE008AD625 /* studiaWidgets.swift */,
+				014D053527AE6CBF008AD625 /* Assets.xcassets */,
+				014D053727AE6CBF008AD625 /* Info.plist */,
+			);
+			path = studiaWidgets;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -112,10 +180,12 @@
 				011A40D72786738500A9264D /* Sources */,
 				011A40D82786738500A9264D /* Frameworks */,
 				011A40D92786738500A9264D /* Resources */,
+				014D052727AE6B7B008AD625 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				014D053927AE6CBF008AD625 /* PBXTargetDependency */,
 			);
 			name = iosStudia;
 			packageProductDependencies = (
@@ -130,6 +200,23 @@
 			productReference = 011A40DB2786738500A9264D /* iosStudia.app */;
 			productType = "com.apple.product-type.application";
 		};
+		014D052E27AE6CBE008AD625 /* studiaWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 014D053B27AE6CBF008AD625 /* Build configuration list for PBXNativeTarget "studiaWidgetsExtension" */;
+			buildPhases = (
+				014D052B27AE6CBE008AD625 /* Sources */,
+				014D052C27AE6CBE008AD625 /* Frameworks */,
+				014D052D27AE6CBE008AD625 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = studiaWidgetsExtension;
+			productName = studiaWidgetsExtension;
+			productReference = 014D052F27AE6CBE008AD625 /* studiaWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -141,6 +228,9 @@
 				LastUpgradeCheck = 1320;
 				TargetAttributes = {
 					011A40DA2786738500A9264D = {
+						CreatedOnToolsVersion = 13.2;
+					};
+					014D052E27AE6CBE008AD625 = {
 						CreatedOnToolsVersion = 13.2;
 					};
 				};
@@ -163,6 +253,7 @@
 			projectRoot = "";
 			targets = (
 				011A40DA2786738500A9264D /* iosStudia */,
+				014D052E27AE6CBE008AD625 /* studiaWidgetsExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -177,6 +268,14 @@
 				011A40E32786738600A9264D /* Assets.xcassets in Resources */,
 				01D253CF2787161900A71317 /* Settings.bundle in Resources */,
 				01F401DC27868CB900FEC7F6 /* NanumSquare_acB.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		014D052D27AE6CBE008AD625 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				014D053627AE6CBF008AD625 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -196,7 +295,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		014D052B27AE6CBE008AD625 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				014D053427AE6CBE008AD625 /* studiaWidgets.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		014D053927AE6CBF008AD625 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 014D052E27AE6CBE008AD625 /* studiaWidgetsExtension */;
+			targetProxy = 014D053827AE6CBF008AD625 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		011A40E72786738600A9264D /* Debug */ = {
@@ -318,8 +433,10 @@
 		011A40EA2786738600A9264D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = iosStudia/iosStudia.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -349,8 +466,10 @@
 		011A40EB2786738600A9264D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = iosStudia/iosStudia.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iosStudia/Preview Content\"";
@@ -376,6 +495,64 @@
 			};
 			name = Release;
 		};
+		014D053C27AE6CBF008AD625 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = studiaWidgetsExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 58R5WFN6JY;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = studiaWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = studiaWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = blue.studia.iosStudia.studiaWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		014D053D27AE6CBF008AD625 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = studiaWidgetsExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 58R5WFN6JY;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = studiaWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = studiaWidgets;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = blue.studia.iosStudia.studiaWidgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -393,6 +570,15 @@
 			buildConfigurations = (
 				011A40EA2786738600A9264D /* Debug */,
 				011A40EB2786738600A9264D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		014D053B27AE6CBF008AD625 /* Build configuration list for PBXNativeTarget "studiaWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				014D053C27AE6CBF008AD625 /* Debug */,
+				014D053D27AE6CBF008AD625 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
