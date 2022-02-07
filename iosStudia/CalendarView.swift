@@ -75,143 +75,185 @@ struct CalendarView: View {
                 Color("ThemeColor")
                     .edgesIgnoringSafeArea(.top)
                 Color("BgColor")
-                ScrollView() {
-                    VStack(spacing: 15) {
-                        HStack {
-                            // Date Navigation
-                            Button(action: {
-                                // Date Back
-                                selectedDate -= 86400
-                                load()
-                            }) {
-                                Image(systemName: "chevron.left")
-                                    .foregroundColor(Color("TextColor"))
-                                    .font(.system(size: 25))
-                                    .padding(.trailing, 10)
-                            }
-                            Button(action: {
-                                // Open & close the date picker
-                                withAnimation(Animation.easeInOut(duration: 0.3)) {
-                                    isPickerOpen.toggle()
-                                }
-                            }) {
-                                Text(formatDisplay.string(from: selectedDate))
-                                    .foregroundColor(Color("TextColor"))
-                                    .font(.system(size: 25))
-                            }
-                            Button(action: {
-                                // Date Forward
-                                selectedDate += 86400
-                                load()
-                            }) {
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(Color("TextColor"))
-                                    .font(.system(size: 25))
-                                    .padding(.leading, 10)
-                            }
-                            Spacer()
-                            
-                            Button(action: {
-                                self.showModal = true
-                            }) {
-                                Image(systemName: "plus.circle")
-                                    .foregroundColor(Color("TextColor"))
-                                    .font(.system(size: 25))
-                                    .padding(.trailing, 10)
-                            }
-                            .sheet(isPresented: self.$showModal) {
-                                
-                                AddCalendarModalView(idx: notes.count, date: formatForDB.string(from: selectedDate))
-                            }
-                        }
-                        
-                        if isPickerOpen {
-                            DatePicker("날짜 선택", selection: $selectedDate, displayedComponents: .date)
-                                .datePickerStyle(WheelDatePickerStyle())
-                                .labelsHidden()
-                                .onChange(of: selectedDate, perform: { _newValue in
+                GeometryReader { geometry in
+                    ScrollView {
+                        VStack(spacing: 15) {
+                            HStack {
+                                // Date Navigation
+                                Button(action: {
+                                    // Date Back
+                                    selectedDate -= 86400
                                     load()
-                                })
-                        }
-                        
-                        VStack {
-                            ForEach(notes) { note in
-                                NavigationLink(destination: NoteDetailsView(selectedNote: note, date: selectedDate)) {
-                                    HStack(alignment: .center, spacing: 10) {
-                                        Text(note.subject)
-                                            .frame(width: 35, height:35)
-                                            .foregroundColor(Color.white)
-                                            .background(Color.purple)
-                                            .font(.system(size: 15))
-                                            .cornerRadius(10)
-                                        
-                                        Text(note.content)
-                                            .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                            .multilineTextAlignment(.leading)
+                                }) {
+                                    Image(systemName: "chevron.left")
+                                        .foregroundColor(Color("TextColor"))
+                                        .font(.system(size: 25))
+                                        .padding(.trailing, 10)
+                                }
+                                Button(action: {
+                                    // Open & close the date picker
+                                    withAnimation(Animation.easeInOut(duration: 0.3)) {
+                                        isPickerOpen.toggle()
                                     }
-                                    .padding(7)
-                                    .foregroundColor(Color("TextColor"))
+                                }) {
+                                    Text(formatDisplay.string(from: selectedDate))
+                                        .foregroundColor(Color("TextColor"))
+                                        .font(.system(size: 25))
+                                }
+                                Button(action: {
+                                    // Date Forward
+                                    selectedDate += 86400
+                                    load()
+                                }) {
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(Color("TextColor"))
+                                        .font(.system(size: 25))
+                                        .padding(.leading, 10)
+                                }
+                                Spacer()
+                                
+                                Button(action: {
+                                    self.showModal = true
+                                }) {
+                                    Image(systemName: "plus.circle")
+                                        .foregroundColor(Color("TextColor"))
+                                        .font(.system(size: 25))
+                                        .padding(.trailing, 10)
+                                }
+                                .sheet(isPresented: self.$showModal) {
+                                    
+                                    AddCalendarModalView(idx: notes.count, date: formatForDB.string(from: selectedDate))
+                                }
+                            }
+                            
+                            if isPickerOpen {
+                                DatePicker("날짜 선택", selection: $selectedDate, displayedComponents: .date)
+                                    .datePickerStyle(WheelDatePickerStyle())
+                                    .labelsHidden()
+                                    .onChange(of: selectedDate, perform: { _newValue in
+                                        load()
+                                    })
+                            }
+                            
+                            VStack {
+                                ForEach(notes) { note in
+                                    NavigationLink(destination: NoteDetailsView(selectedNote: note, date: selectedDate)) {
+                                        HStack(alignment: .center, spacing: 10) {
+                                            Text(note.subject)
+                                                .frame(width: 35, height:35)
+                                                .foregroundColor(Color.white)
+                                                .background(Color.purple)
+                                                .font(.system(size: 15))
+                                                .cornerRadius(10)
+                                            
+                                            Text(note.content)
+                                                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+                                                .multilineTextAlignment(.leading)
+                                        }
+                                        .padding(7)
+                                        .foregroundColor(Color("TextColor"))
+                                        .background(Color("HighlightBgColor"))
+                                        .cornerRadius(10)
+                                    }
+                                }
+                            }
+                            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 150, alignment: .topLeading)
+                            .background(Color("BgColor"))
+                            .padding(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .stroke(Color("ThemeColor"), style: StrokeStyle(lineWidth: 3, dash: [11]))
+                            )
+                            
+                            if geometry.size.width < geometry.size.height {
+                                VStack {
+                                    NavigationLink(destination: MemoDetailsView(memoContent: memo, date: selectedDate)) {
+                                        VStack(alignment: .leading, spacing: 10) {
+                                            Text("메모")
+                                                .foregroundColor(Color("TextColor"))
+                                                .font(.system(size: 25, weight: .semibold))
+                                            Text(memo)
+                                                .foregroundColor(Color("TextColor"))
+                                                .font(.system(size: 20))
+                                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 50, alignment: .leading)
+                                        }
+                                        .padding([.vertical], 15)
+                                    }
+                                    .padding(10)
+                                    .background(Color("HighlightBgColor"))
+                                    .cornerRadius(10)
+                                    
+                                    NavigationLink(destination: ReminderDetailsView(reminderContent: reminderArray, date: selectedDate)) {
+                                        VStack(alignment: .leading, spacing: 10) {
+                                            Text("과제 및 준비물")
+                                                .foregroundColor(Color("TextColor"))
+                                                .font(.system(size: 25, weight: .semibold))
+                                            Text(reminders)
+                                                .foregroundColor(Color("TextColor"))
+                                                .font(.system(size: 20))
+                                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 50, alignment: .leading)
+                                                .multilineTextAlignment(.leading)
+                                        }
+                                        .padding([.vertical], 15)
+                                    }
+                                    .padding(10)
+                                    .background(Color("HighlightBgColor"))
+                                    .cornerRadius(10)
+                                }
+                            } else {
+                                HStack {
+                                    NavigationLink(destination: MemoDetailsView(memoContent: memo, date: selectedDate)) {
+                                        VStack(alignment: .leading, spacing: 10) {
+                                            Text("메모")
+                                                .foregroundColor(Color("TextColor"))
+                                                .font(.system(size: 25, weight: .semibold))
+                                            Text(memo)
+                                                .foregroundColor(Color("TextColor"))
+                                                .font(.system(size: 20))
+                                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 50, alignment: .leading)
+                                        }
+                                        .padding([.vertical], 15)
+                                    }
+                                    .padding(10)
+                                    .background(Color("HighlightBgColor"))
+                                    .cornerRadius(10)
+                                    
+                                    NavigationLink(destination: ReminderDetailsView(reminderContent: reminderArray, date: selectedDate)) {
+                                        VStack(alignment: .leading, spacing: 10) {
+                                            Text("과제 및 준비물")
+                                                .foregroundColor(Color("TextColor"))
+                                                .font(.system(size: 25, weight: .semibold))
+                                            Text(reminders)
+                                                .foregroundColor(Color("TextColor"))
+                                                .font(.system(size: 20))
+                                                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 50, alignment: .leading)
+                                                .multilineTextAlignment(.leading)
+                                        }
+                                        .padding([.vertical], 15)
+                                    }
+                                    .padding(10)
                                     .background(Color("HighlightBgColor"))
                                     .cornerRadius(10)
                                 }
                             }
                         }
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 150, alignment: .topLeading)
+                        .padding()
                         .background(Color("BgColor"))
-                        .padding(10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 15)
-                                .stroke(Color("ThemeColor"), style: StrokeStyle(lineWidth: 3, dash: [11]))
-                        )
-                        
-                        NavigationLink(destination: MemoDetailsView(memoContent: memo, date: selectedDate)) {
-                            VStack(alignment: .leading, spacing: 10) {
-                                Text("메모")
-                                    .foregroundColor(Color("TextColor"))
-                                    .font(.system(size: 25, weight: .semibold))
-                                Text(memo)
-                                    .foregroundColor(Color("TextColor"))
-                                    .font(.system(size: 20))
-                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                            }
-                            .padding([.vertical], 15)
+                        .navigationTitle("내 캘린더")
+                        .onAppear {
+                            let navigationBarAppearance = UINavigationBar.appearance()
+                            navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+                            navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+                            navigationBarAppearance.backgroundColor = UIColor(Color("ThemeColor"))
+                            navigationBarAppearance.barTintColor = UIColor(Color("ThemeColor"))
+                            
+                            load()
                         }
-                        .padding(10)
-                        .background(Color("HighlightBgColor"))
-                        .cornerRadius(10)
-                        
-                        NavigationLink(destination: ReminderDetailsView(reminderContent: reminderArray, date: selectedDate)) {
-                            VStack(alignment: .leading, spacing: 10) {
-                                Text("과제 및 준비물")
-                                    .foregroundColor(Color("TextColor"))
-                                    .font(.system(size: 25, weight: .semibold))
-                                Text(reminders)
-                                    .foregroundColor(Color("TextColor"))
-                                    .font(.system(size: 20))
-                                    .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                                    .multilineTextAlignment(.leading)
-                            }
-                            .padding([.vertical], 15)
-                        }
-                        .padding(10)
-                        .background(Color("HighlightBgColor"))
-                        .cornerRadius(10)
-                    }
-                    .padding()
-                    .background(Color("BgColor"))
-                    .navigationTitle("내 캘린더")
-                    .onAppear {
-                        let navigationBarAppearance = UINavigationBar.appearance()
-                        navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-                        navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-                        navigationBarAppearance.backgroundColor = UIColor(Color("ThemeColor"))
-                        navigationBarAppearance.barTintColor = UIColor(Color("ThemeColor"))
-                        
-                        load()
                     }
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         .accentColor(.white)
     }
 }
@@ -288,5 +330,6 @@ struct AddCalendarModalView: View {
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
         CalendarView()
+            .previewInterfaceOrientation(.portrait)
     }
 }

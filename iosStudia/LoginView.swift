@@ -143,6 +143,7 @@ struct LoginView: View {
             )
             .padding(.top, 5)
         }
+        .frame(minWidth: 0, maxWidth: 500)
         .padding()
         .navigate(to: CalendarView(), when: $isLoggedIn)
     }
@@ -151,6 +152,7 @@ struct LoginView: View {
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
         LoginView()
+.previewInterfaceOrientation(.portraitUpsideDown)
     }
 }
 
