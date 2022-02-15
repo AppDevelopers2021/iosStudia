@@ -13,6 +13,14 @@ import GoogleSignIn
 struct iosStudiaApp: App {
     init() {
         FirebaseApp.configure()
+        
+        // Set default value for settings
+        UserDefaults.standard.register(defaults: [
+            "persistence": true
+        ])
+        
+        // Set persistence for firebase database
+        Database.database().isPersistenceEnabled = UserDefaults.standard.bool(forKey: "persistence")
     }
     
     var body: some Scene {

@@ -30,7 +30,7 @@ struct LoginView: View {
                     .padding(.leading, 15)
             }
             .frame(height: 40)
-            .background(Color(red: 238/255, green: 238/255, blue: 238/255))
+            .background(Color("TextFieldBgColor"))
             .cornerRadius(20)
             .padding(.bottom, 10)
             
@@ -44,7 +44,7 @@ struct LoginView: View {
                     .padding(.leading, 15)
             }
             .frame(height: 40)
-            .background(Color(red: 238/255, green: 238/255, blue: 238/255))
+            .background(Color("TextFieldBgColor"))
             .cornerRadius(20)
             .padding(.bottom, 10)
             
@@ -135,8 +135,9 @@ struct LoginView: View {
             }
             .frame(minWidth: 0, maxWidth: .infinity)
             .frame(height: 40, alignment: .center)
-            .background(Color.white)
-            .foregroundColor(Color.black)
+            .background(Color("BgColor"))
+            .cornerRadius(10)
+            .foregroundColor(Color("TextColor"))
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(Color("ThemeColor"), lineWidth: 2)
@@ -152,7 +153,6 @@ struct LoginView: View {
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
         LoginView()
-.previewInterfaceOrientation(.portraitUpsideDown)
     }
 }
 
