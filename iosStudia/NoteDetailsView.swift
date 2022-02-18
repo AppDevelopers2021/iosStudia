@@ -13,6 +13,7 @@ struct NoteDetailsView: View {
     @State var editedSubject: String = ""
     @State var editedOptionalSubject: String = ""
     @State var editedContent: String = ""
+    @State private var showingDeleteSheet: Bool = false
     let subjects = ["가정", "과학", "국어", "기술", "도덕", "독서", "미술", "보건", "사회", "수학", "영어", "음악", "정보", "진로", "창체", "체육", "환경", "자율", "기타"]
     
     var selectedNote: Note
@@ -40,7 +41,7 @@ struct NoteDetailsView: View {
                                 }
                             }
                             .pickerStyle(.menu)
-                            .accentColor(.black)
+                            .accentColor(Color("TextColor"))
                             .padding(.trailing, 50)
                             
                             if editedSubject == "기타" {
@@ -55,6 +56,35 @@ struct NoteDetailsView: View {
                                 .accentColor(.blue)
                         })
                             .listRowBackground(Color("HighlightBgColor"))
+                        
+                        Section(header: Text("삭제"), footer: Text("노트를 삭제한 후에는 되돌릴 수 없습니다.")) {
+                            Button(role: .destructive, action: {
+                                self.showingDeleteSheet = true
+                            }) {
+                                Text("노트 삭제")
+                            }
+                            .confirmationDialog(
+                                "삭제하시겠습니까?",
+                                isPresented: $showingDeleteSheet
+                            ) {
+                                Button("노트 삭제", role: .destructive) {
+                                    guard let uid = Auth.auth().currentUser?.uid else { return }
+                                    Database.database().reference().child("calendar/\(uid)/\(formatForDB.string(from: date))").getData(completion: { error, snapshot in
+                                        guard error == nil else {
+                                            print(error!.localizedDescription)
+                                            return;
+                                        }
+                                        if let fetchedData = snapshot.value as? NSDictionary {
+                                            if var fetchedNotes = fetchedData["note"] as? [AnyObject] {
+                                                fetchedNotes.remove(at: selectedNote.idx)
+                                                Database.database().reference().child("calendar/\(uid)/\(formatForDB.string(from: date))/note").setValue(fetchedNotes)
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                        .listRowBackground(Color("HighlightBgColor"))
                     } else {
                         // Show Plain Text
                         Text(selectedNote.subject)

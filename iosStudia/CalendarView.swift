@@ -25,7 +25,6 @@ struct CalendarView: View {
     @State var notes: [Note] = []               // Notes to display
     @State private var showAddNoteModal = false // Show "Add Note" Modal
     @State private var showAccountModal = false // Show Account Modal
-    @State private var isOffline = false        // Show offline indicator
     @State var isLoggedOut = false
     
     
@@ -41,18 +40,6 @@ struct CalendarView: View {
     }()
     
     func load() {
-        // Detect if connection is offline
-        let connectedRef = Database.database().reference(withPath: ".info/connected")
-        connectedRef.observe(.value, with: { snapshot in
-            if snapshot.value as? Bool ?? true {
-                // Connected
-                self.isOffline = false
-            } else {
-                // Offline
-                self.isOffline = true
-            }
-        })
-        
         guard let uid = Auth.auth().currentUser?.uid else { return }
         Database.database().reference().child("calendar/\(uid)/\(formatForDB.string(from: selectedDate))").observe(DataEventType.value, with: { snapshot in
             if let fetchedData = snapshot.value as? NSDictionary {
@@ -60,8 +47,9 @@ struct CalendarView: View {
                 if let fetchedNotes = fetchedData["note"] as? NSArray {
                     var noteList: [Note] = []
                     for i in 0..<fetchedNotes.count {
-                        let currentNote = fetchedNotes[i] as! NSDictionary
-                        noteList.append(Note(idx: i, subject: currentNote["subject"] as! String, content: currentNote["content"] as! String))
+                        if let currentNote = fetchedNotes[i] as? NSDictionary {
+                            noteList.append(Note(idx: i, subject: currentNote["subject"] as! String, content: currentNote["content"] as! String))
+                        } else { self.notes = [] }
                     }
                     self.notes = noteList
                 } else { self.notes = [] }
@@ -92,25 +80,6 @@ struct CalendarView: View {
                 Color("BgColor")
                 GeometryReader { geometry in
                     ScrollView {
-                        if isOffline {
-                            HStack {
-                                // Offline Warning Message
-                                Spacer()
-                                Image(systemName: "wifi.slash")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: 30, height: 30)
-                                    .foregroundColor(.white)
-                                Text("오프라인 상태입니다.")
-                                    .foregroundColor(.white)
-                                Spacer()
-                            }
-                            .padding(10)
-                            .background(.red)
-                            .cornerRadius(10)
-                            .padding(EdgeInsets(top: 15, leading: 15, bottom: 0, trailing: 15))
-                        }
-                        
                         VStack(spacing: 15) {
                             HStack {
                                 // Date Navigation
@@ -327,7 +296,7 @@ struct AddNoteModalView: View {
                                 }
                             }
                             .pickerStyle(.menu)
-                            .accentColor(.black)
+                            .accentColor(Color("TextColor"))
                             .padding(.trailing, 50)
                             
                             if selectedSubject == "기타" {
@@ -355,11 +324,13 @@ struct AddNoteModalView: View {
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
-                            guard let uid = Auth.auth().currentUser?.uid else { return }
-                            if selectedSubject == "기타" {
-                                Database.database().reference().child("calendar/\(uid)/\(date)/note/\(idx)").setValue(["subject": selectedOptionalSubject, "content": inputContent])
-                            } else {
-                                Database.database().reference().child("calendar/\(uid)/\(date)/note/\(idx)").setValue(["subject": selectedSubject, "content": inputContent])
+                            if inputContent != "" {
+                                guard let uid = Auth.auth().currentUser?.uid else { return }
+                                if selectedSubject == "기타" {
+                                    Database.database().reference().child("calendar/\(uid)/\(date)/note/\(idx)").setValue(["subject": selectedOptionalSubject, "content": inputContent])
+                                } else {
+                                    Database.database().reference().child("calendar/\(uid)/\(date)/note/\(idx)").setValue(["subject": selectedSubject, "content": inputContent])
+                                }
                             }
                             self.presentationMode.wrappedValue.dismiss()
                         }) {
@@ -451,10 +422,18 @@ struct SettingsModalView: View {
             }
         }
         .accentColor(.white)
+        .onAppear {
+            UITableView.appearance().backgroundColor = UIColor.systemGroupedBackground
+        }
     }
 }
 
 struct AccountModalView: View {
+    @State private var showingLogOutSheet: Bool = false
+    @State private var showingDeleteSheet: Bool = false
+    @State private var showingLoggedOutAlert: Bool = false
+    @State private var showDeleteAccountModal: Bool = false
+    
     var body: some View {
         VStack {
             Form {
@@ -479,46 +458,193 @@ struct AccountModalView: View {
                 .background(Color(UIColor.systemGroupedBackground))
                 
                 Section {
-                    NavigationLink(destination: Text("hi")) {
+                    NavigationLink(destination: Text(String(Auth.auth().currentUser?.email ?? "이메일 주소"))) {
                         Text("이메일")
-                            .foregroundColor(Color("TextColor"))
-                    }
-                    
-                    NavigationLink(destination: Text("hi")) {
-                        Text("암호 및 보안")
                             .foregroundColor(Color("TextColor"))
                     }
                 }
                 
                 Section {
                     Button("로그아웃", role: .destructive) {
-                        do {
-                            try Auth.auth().signOut()
-                        } catch let signOutError as NSError {
-                            print("Error signing out: %@", signOutError)
-                        }
+                        self.showingLogOutSheet = true
                     }
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
+                    .confirmationDialog(
+                        "로그아웃하시겠습니까?",
+                        isPresented: $showingLogOutSheet
+                    ) {
+                        Button("로그아웃", role: .destructive) {
+                            do {
+                                try Auth.auth().signOut()
+                                self.showingLoggedOutAlert = true
+                            } catch let signOutError as NSError {
+                                print("Error signing out: %@", signOutError)
+                            }
+                        }
+                    }
+                    
+                    Button("회원탈퇴", role: .destructive) {
+                        self.showDeleteAccountModal = true
+                    }
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
+                    .sheet(isPresented: self.$showDeleteAccountModal) {
+                        DeleteAccountModalView()
+                    }
                 }
             }
         }
         .navigationTitle("계정 관리")
         .navigationBarTitleDisplayMode(.inline)
+        .alert(isPresented: $showingLoggedOutAlert) {
+            Alert(title: Text("앱 재시작 필요"),
+                  message: Text("로그아웃되었습니다. 앱을 재시작해주세요."),
+                  dismissButton: .default(Text("확인"))
+            )
+        }
     }
 }
 
-struct ReAuthModalView: View {
+struct DeleteAccountModalView: View {
+    @Environment (\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
+    @State private var password: String = ""
+    @State private var showingRestartAlert: Bool = false
+    @State private var showingDeleteSheeet: Bool = false
+    
     var body: some View {
-        VStack {
-            // Reauthenticate
+        NavigationView {
+            VStack(alignment: .leading, spacing: 0) {
+                Text("회원탈퇴 전에\n접근 권한을\n다시 인증해주세요.")
+                    .font(Font.custom("NanumSquare_ac Bold", size: 40))
+                    .padding(.bottom, 30)
+                
+                Text("비밀번호")
+                    .font(.caption)
+                    .padding(.leading, 15)
+                HStack {
+                    SecureField("• • • • • • • •", text: $password)
+                        .accentColor(.blue)
+                        .disableAutocorrection(true)
+                        .autocapitalization(.none)
+                        .padding(.leading, 15)
+                }
+                .frame(height: 40)
+                .background(Color("TextFieldBgColor"))
+                .cornerRadius(20)
+                .padding(.bottom, 10)
+                
+                Button(action: {
+                    let credential: AuthCredential = EmailAuthProvider.credential(withEmail: Auth.auth().currentUser?.email ?? "", password: password)
+                    Auth.auth().currentUser?.reauthenticate(with: credential) { result, error in
+                        if error != nil {
+                            // Error
+                        } else {
+                            // Reauthenticated
+                            self.showingDeleteSheeet = true
+                        }
+                    }
+                }) {
+                    Text("비밀번호 인증")
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                        .frame(height: 40, alignment: .center)
+                }
+                .background(Color("ThemeColor"))
+                .foregroundColor(Color.white)
+                .cornerRadius(10)
+                .confirmationDialog(
+                    "탈퇴하시겠습니까?",
+                    isPresented: $showingDeleteSheeet
+                ) {
+                    Button("탈퇴하기", role: .destructive) {
+                        guard let uid = Auth.auth().currentUser?.uid else { return }
+                        Database.database().reference().child("calendar/\(uid)").removeValue()
+                        
+                        Auth.auth().currentUser?.delete { error in
+                            if error != nil {
+                                // An error happened.
+                            } else {
+                                // Account deleted.
+                                self.showingRestartAlert = true
+                            }
+                        }
+                    }
+                }
+                
+                Button(action: {
+                    guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+                    let config = GIDConfiguration(clientID: clientID)
+                    
+                    // Start Signin flow
+                    GIDSignIn.sharedInstance.signIn(with: config, presenting: (UIApplication.shared.windows.first?.rootViewController)!) { user, error in
+                        if let error = error {
+                            print(error.localizedDescription)
+                            return
+                        }
+                        
+                        guard
+                            let authentication = user?.authentication,
+                            let idToken = authentication.idToken
+                        else {
+                            return
+                        }
+                        
+                        let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: authentication.accessToken)
+                        
+                        Auth.auth().currentUser?.reauthenticate(with: credential) { result, error in
+                            if error != nil {
+                                // Error
+                            } else {
+                                // Reauthenticated
+                                self.showingDeleteSheeet = true
+                            }
+                        }
+                    }
+                }) {
+                    Image("google_login")
+                        .resizable()
+                        .frame(width: 25, height: 25)
+                    
+                    Text("Google 계정으로 인증")
+                }
+                .frame(minWidth: 0, maxWidth: .infinity)
+                .frame(height: 40, alignment: .center)
+                .background(Color("BgColor"))
+                .cornerRadius(10)
+                .foregroundColor(Color("TextColor"))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color("ThemeColor"), lineWidth: 2)
+                )
+                .padding(.top, 5)
+            }
+            .frame(minWidth: 0, maxWidth: 500)
+            .padding()
+            .navigationTitle("회원탈퇴")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        self.presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Text("취소")
+                    }
+                }
+            }
+            .alert(isPresented: $showingRestartAlert) {
+                Alert(title: Text("앱 재시작 필요"),
+                      message: Text("탈퇴 절차가 완료되었습니다. 앱을 재시작해주세요."),
+                      dismissButton: .default(Text("확인"))
+                )
+            }
         }
+        .accentColor(.white)
     }
 }
 
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
         CalendarView()
-        AccountModalView()
+        DeleteAccountModalView()
         //.preferredColorScheme(.dark)
     }
 }
