@@ -29,7 +29,8 @@ struct NoteDetailsView: View {
         ZStack {
             Color("ThemeColor")
                 .edgesIgnoringSafeArea(.top)
-            Color("BgColor")
+            Color(UIColor.systemGroupedBackground)
+                .edgesIgnoringSafeArea(.bottom)
             VStack {
                 Form {
                     if isInEditMode {
@@ -49,13 +50,11 @@ struct NoteDetailsView: View {
                                     .accentColor(.blue)
                             }
                         })
-                            .listRowBackground(Color("HighlightBgColor"))
                         
                         Section(header: Text("내용"), content: {
                             TextField("내용 입력", text: $editedContent)
                                 .accentColor(.blue)
                         })
-                            .listRowBackground(Color("HighlightBgColor"))
                         
                         Section(header: Text("삭제"), footer: Text("노트를 삭제한 후에는 되돌릴 수 없습니다.")) {
                             Button(role: .destructive, action: {
@@ -84,13 +83,10 @@ struct NoteDetailsView: View {
                                 }
                             }
                         }
-                        .listRowBackground(Color("HighlightBgColor"))
                     } else {
                         // Show Plain Text
                         Text(selectedNote.subject)
-                            .listRowBackground(Color("HighlightBgColor"))
                         Text(selectedNote.content)
-                            .listRowBackground(Color("HighlightBgColor"))
                     }
                 }
             }

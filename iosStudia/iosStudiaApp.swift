@@ -16,7 +16,8 @@ struct iosStudiaApp: App {
         
         // Set default value for settings
         UserDefaults.standard.register(defaults: [
-            "persistence": true
+            "persistence": true,
+            "isAppAlreadyLaunchedOnce": false
         ])
         
         // Set persistence for firebase database
@@ -25,14 +26,19 @@ struct iosStudiaApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if Auth.auth().currentUser != nil {
-                CalendarView()
+            if UserDefaults.standard.bool(forKey: "isAppAlreadyLaunchedOnce") {
+                if Auth.auth().currentUser != nil {
+                    CalendarView()
+                } else {
+                    LoginView()
+                        .onOpenURL { url in
+                            GIDSignIn.sharedInstance.handle(url)
+                        }
+                }
             } else {
-                LoginView()
-                    .onOpenURL { url in
-                        GIDSignIn.sharedInstance.handle(url)
-                    }
+                TurorialView()
             }
+            
         }
     }
 }

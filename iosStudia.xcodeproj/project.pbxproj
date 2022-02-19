@@ -12,10 +12,12 @@
 		011A40E12786738500A9264D /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011A40E02786738500A9264D /* CalendarView.swift */; };
 		011A40E32786738600A9264D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 011A40E22786738600A9264D /* Assets.xcassets */; };
 		011A40E62786738600A9264D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 011A40E52786738600A9264D /* Preview Assets.xcassets */; };
+		014685CA27BFDDBD00E03B27 /* TurorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 014685C927BFDDBD00E03B27 /* TurorialView.swift */; };
 		01BAA3DF27883634003A6499 /* NoteDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01BAA3DE27883634003A6499 /* NoteDetailsView.swift */; };
 		01D253CD2786FB9800A71317 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 01D253CC2786FB9800A71317 /* GoogleSignIn */; };
 		01D253D12787BC6200A71317 /* MemoDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D253D02787BC6200A71317 /* MemoDetailsView.swift */; };
-		01F401CC2786873F00FEC7F6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 01F401CB2786873F00FEC7F6 /* GoogleService-Info.plist */; };
+		01EA303927BF8E000052FAE5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 01EA303827BF8E000052FAE5 /* GoogleService-Info.plist */; };
+		01EA303C27BF8ED00052FAE5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 01EA303E27BF8ED00052FAE5 /* Localizable.strings */; };
 		01F401CF2786884200FEC7F6 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 01F401CE2786884200FEC7F6 /* FirebaseAnalytics */; };
 		01F401D12786884200FEC7F6 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 01F401D02786884200FEC7F6 /* FirebaseAuth */; };
 		01F401D32786884200FEC7F6 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 01F401D22786884200FEC7F6 /* FirebaseCrashlytics */; };
@@ -33,9 +35,12 @@
 		011A40E22786738600A9264D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		011A40E52786738600A9264D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		011A40EE2786771A00A9264D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		014685C927BFDDBD00E03B27 /* TurorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurorialView.swift; sourceTree = "<group>"; };
 		01BAA3DE27883634003A6499 /* NoteDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDetailsView.swift; sourceTree = "<group>"; };
 		01D253D02787BC6200A71317 /* MemoDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoDetailsView.swift; sourceTree = "<group>"; };
-		01F401CB2786873F00FEC7F6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		01EA303827BF8E000052FAE5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		01EA303D27BF8ED00052FAE5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		01EA303F27BF8F000052FAE5 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		01F401D927868BE000FEC7F6 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		01F401DB27868CB900FEC7F6 /* NanumSquare_acB.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumSquare_acB.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -77,8 +82,10 @@
 			isa = PBXGroup;
 			children = (
 				011A40EE2786771A00A9264D /* Info.plist */,
-				01F401CB2786873F00FEC7F6 /* GoogleService-Info.plist */,
+				01EA303827BF8E000052FAE5 /* GoogleService-Info.plist */,
+				01EA303E27BF8ED00052FAE5 /* Localizable.strings */,
 				011A40DE2786738500A9264D /* iosStudiaApp.swift */,
+				014685C927BFDDBD00E03B27 /* TurorialView.swift */,
 				01F401D927868BE000FEC7F6 /* LoginView.swift */,
 				011A40E02786738500A9264D /* CalendarView.swift */,
 				01BAA3DE27883634003A6499 /* NoteDetailsView.swift */,
@@ -149,6 +156,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = 011A40D22786738500A9264D;
 			packageReferences = (
@@ -169,8 +177,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01F401CC2786873F00FEC7F6 /* GoogleService-Info.plist in Resources */,
+				01EA303C27BF8ED00052FAE5 /* Localizable.strings in Resources */,
 				011A40E62786738600A9264D /* Preview Assets.xcassets in Resources */,
+				01EA303927BF8E000052FAE5 /* GoogleService-Info.plist in Resources */,
 				011A40E32786738600A9264D /* Assets.xcassets in Resources */,
 				01F401DC27868CB900FEC7F6 /* NanumSquare_acB.ttf in Resources */,
 			);
@@ -183,6 +192,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				014685CA27BFDDBD00E03B27 /* TurorialView.swift in Sources */,
 				01D253D12787BC6200A71317 /* MemoDetailsView.swift in Sources */,
 				0108D04327ABBD1D00B2D46C /* ReminderDetailsView.swift in Sources */,
 				01F401DA27868BE000FEC7F6 /* LoginView.swift in Sources */,
@@ -194,11 +204,24 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		01EA303E27BF8ED00052FAE5 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				01EA303D27BF8ED00052FAE5 /* en */,
+				01EA303F27BF8F000052FAE5 /* ko */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		011A40E72786738600A9264D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -260,6 +283,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -320,7 +344,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_ASSET_PATHS = "\"iosStudia/Preview Content\"";
-				DEVELOPMENT_TEAM = 58R5WFN6JY;
+				DEVELOPMENT_TEAM = R83HWKNT96;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosStudia/Info.plist;
@@ -350,7 +374,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iosStudia/Preview Content\"";
-				DEVELOPMENT_TEAM = 58R5WFN6JY;
+				DEVELOPMENT_TEAM = R83HWKNT96;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = iosStudia/Info.plist;

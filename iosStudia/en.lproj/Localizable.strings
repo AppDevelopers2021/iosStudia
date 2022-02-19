@@ -1,0 +1,66 @@
+/*
+  Localizable.strings
+  iosStudia
+
+  Created by 이종우 on 2022/02/18.
+  
+*/
+
+"나만의\n독창적인 공부\n스타일 찾기" = "Studying made easier with STUDIA";
+"이메일 주소" = "Email Adress";
+"비밀번호" = "Password";
+"계정 만들기" = "Sign Up";
+"비밀번호 찾기" = "Forgot Password?";
+"로그인" = "Sign In";
+"Google 계정으로 로그인" = "Sign In with Google";
+"메모" = "Memo";
+"과제 및 준비물" = "To Do";
+"내 캘린더" = "My Calendar";
+"과목" = "Subject";
+"과목 선택" = "Select Subject";
+"직접 입력" = "Subject";
+"내용" = "Content";
+"내용 입력" = "Content";
+"노트 추가" = "Add Note";
+"취소" = "Cancel";
+"완료" = "Done";
+"계정 관리" = "Account Settings";
+"네트워크" = "Network";
+"오프라인 지속성" = "Offline Access";
+"데이터의 사본을 기기에 저장하여 오프라인 상태에서도 노트를 불러오고 작성합니다." = "Save a copy of your data on this device to use the app while offline.";
+"정보" = "Info";
+"앱 버전" = "Version";
+"빌드번호" = "Build No.";
+"이용 약관" = "Terms of Service";
+"개인정보처리방침" = "Privacy Policy";
+"개발자 웹 사이트" = "Developer Website";
+"설정" = "Settings";
+"내 계정" = "My Account";
+"이메일" = "Email";
+"로그아웃" = "Sign Out";
+"로그아웃하시겠습니까?" = "Sign Out?";
+"회원탈퇴" = "Delete Account";
+"앱 재시작 필요" = "App Restart Required";
+"로그아웃되었습니다. 앱을 재시작해주세요." = "You are signed out. Please restart the application to continue.";
+"회원탈퇴 전에\n접근 권한을\n다시 인증해주세요." = "Reauthenticate\nBefore Deleting Your Account";
+"비밀번호 인증" = "Authenticate";
+"탈퇴하시겠습니까?" = "Delete Account?";
+"탈퇴하기" = "Delete Account";
+"Google 계정으로 인증" = "Authenticate with Google";
+"탈퇴 절차가 완료되었습니다. 앱을 재시작해주세요." = "Your account has been deleted. Please restart the application to continue.";
+"삭제" = "Delete";
+"노트를 삭제한 후에는 되돌릴 수 없습니다." = "This action cannot be undone.";
+"노트 삭제" = "Delete Note";
+"삭제하시겠습니까?" = "Delete this note?";
+"노트" = "Note";
+"편집" = "Edit";
+"항목 추가" = "Add Item";
+"메모 내용 입력" = "Memo";
+"과목별로 배운 내용을 노트로 작성하세요" = "Take Notes On What You've Learned";
+"메모로 중요한 사항을 놓치지 마세요" = "Remember Important Stuff with Memo";
+"과제 및 준비물로 할 일을 정리하세요" = "Organize Tasks with To-Dos";
+"준비되었습니다" = "You're All Set Up";
+"건너뛰기" = "Skip";
+"시작하기" = "Got It";
+"이전" = "Back";
+"다음" = "Next";

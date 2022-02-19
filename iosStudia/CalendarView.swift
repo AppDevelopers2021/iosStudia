@@ -340,6 +340,9 @@ struct AddNoteModalView: View {
                 }
             }
             .accentColor(.white)
+            .onAppear {
+                UITableView.appearance().backgroundColor = UIColor.systemGroupedBackground
+            }
         }
     }
 }
@@ -646,5 +649,11 @@ struct CalendarView_Previews: PreviewProvider {
         CalendarView()
         DeleteAccountModalView()
         //.preferredColorScheme(.dark)
+    }
+}
+
+extension String {
+    var localized: String {
+        return NSLocalizedString(self, tableName: "Localizable", value: self, comment: "")
     }
 }
