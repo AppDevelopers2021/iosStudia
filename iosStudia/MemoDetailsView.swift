@@ -1,22 +1,16 @@
-//
-//  MemoEditView.swift
-//  iosStudia
-//
-//  Created by 이종우 on 2022/01/07.
-//
-
 import SwiftUI
 import Firebase
 
 struct MemoDetailsView: View {
-    @State var isInEditMode: Bool = false
-    @State var edited: String = ""
+    @State var isInEditMode: Bool = false           // Let user edit stuff if true
+    @State var edited: String = ""                  // Edited content to write to DB
+    @FocusState private var fieldIsFocused: Bool    // Show keyboard when in edit mode
     
-    @FocusState private var fieldIsFocused: Bool
-    
+    // Variables passed on from CalendarView
     var memoContent: String
     var date: Date
     
+    // Format date value for DB (YYYYMMDD)
     let formatForDB: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "YYYYMMdd"
@@ -89,6 +83,6 @@ struct MemoDetailsView: View {
 
 struct MemoDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {MemoDetailsView(memoContent: "Test Memo", date: Date())}
+        MemoDetailsView(memoContent: "Test Value for Live Preview", date: Date())
     }
 }

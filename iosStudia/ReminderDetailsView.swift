@@ -9,13 +9,15 @@ import SwiftUI
 import Firebase
 
 struct ReminderDetailsView: View {
-    @State var isInEditMode: Bool = false
-    @State var initialValue: [String] = []
-    @State var edited: [String] = []
+    @State var isInEditMode: Bool = false   // Let user edit stuff if true
+    @State var initialValue: [String] = []  // To put back initial value when user cancels edit
+    @State var edited: [String] = []        // Edited content to write to DB
     
+    // Variables passed on from CalendarView
     var reminderContent: NSArray
     var date: Date
     
+    // Format date value for DB (YYYYMMDD)
     let formatForDB: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "YYYYMMdd"
@@ -34,15 +36,17 @@ struct ReminderDetailsView: View {
                             get: { return edited[index] },
                             set: { (newValue) in return self.edited[index] = newValue }
                         ))
-                            .disabled(!isInEditMode)
+                            .disabled(!isInEditMode)    // Enable editing only in EditMode
                             .accentColor(.blue)
                     }
                     .onDelete { indexSet in
+                        // When user swipes to delete
                         edited.remove(atOffsets: indexSet)
                     }
-                    .deleteDisabled(!isInEditMode)
+                    .deleteDisabled(!isInEditMode)      // Enable swipe only in EditMode
                     
                     if isInEditMode {
+                        // Add Item button
                         Button(action: {
                             withAnimation {
                                 edited.append("")
@@ -61,6 +65,7 @@ struct ReminderDetailsView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     if isInEditMode {
+                        // Cancel button
                         Button(action: {
                             withAnimation {
                                 isInEditMode = false
@@ -73,6 +78,7 @@ struct ReminderDetailsView: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     if isInEditMode  {
+                        // Done button
                         Button(action: {
                             withAnimation {
                                 isInEditMode = false
@@ -86,6 +92,7 @@ struct ReminderDetailsView: View {
                             Text("완료")
                         }
                     } else {
+                        // Edit button
                         Button(action: {
                             withAnimation {
                                 isInEditMode = true
@@ -97,6 +104,7 @@ struct ReminderDetailsView: View {
                 }
             }
             .onAppear() {
+                // Convert to @State variable
                 if let reminderToArray = reminderContent as? [String] {
                     self.initialValue = reminderToArray
                     self.edited = reminderToArray
@@ -108,9 +116,6 @@ struct ReminderDetailsView: View {
 
 struct ReminderDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {
-            ReminderDetailsView(reminderContent: ["Test data 1", "Test data 2"], date: Date())
-        }
-        .accentColor(.white)
+        ReminderDetailsView(reminderContent: ["Test Value for Live Preview"], date: Date())
     }
 }

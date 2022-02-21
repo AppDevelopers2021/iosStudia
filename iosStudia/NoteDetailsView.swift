@@ -1,24 +1,21 @@
-//
-//  NoteDetailsView.swift
-//  iosStudia
-//
-//  Created by 이종우 on 2022/01/07.
-//
-
 import SwiftUI
 import Firebase
 
 struct NoteDetailsView: View {
-    @State var isInEditMode: Bool = false
-    @State var editedSubject: String = ""
-    @State var editedOptionalSubject: String = ""
-    @State var editedContent: String = ""
-    @State private var showingDeleteSheet: Bool = false
+    @State private var isInEditMode: Bool = false           // Let user edit stuff if true
+    @State private var editedSubject: String = ""           // Edited subject to write to DB
+    @State private var editedOptionalSubject: String = ""   // Used when user selects "Other"
+    @State private var editedContent: String = ""           // Edited content to write to DB
+    @State private var showingDeleteSheet: Bool = false     // Show "Delete note?" action sheet
+    
+    // Full list of all subjects
     let subjects = ["가정", "과학", "국어", "기술", "도덕", "독서", "미술", "보건", "사회", "수학", "영어", "음악", "정보", "진로", "창체", "체육", "환경", "자율", "기타"]
     
+    // Variables passed on from CalendarView
     var selectedNote: Note
     var date: Date
     
+    // Format date value for DB (YYYYMMDD)
     let formatForDB: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "YYYYMMdd"
@@ -143,7 +140,6 @@ struct NoteDetailsView: View {
 
 struct NoteDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationView {NoteDetailsView(selectedNote: Note(idx: 0, subject: "국어", content: "테스트"), date: Date())}
-        .accentColor(.white)
+        NoteDetailsView(selectedNote: Note(idx: 0, subject: "국어", content: "Test Value for Live Preview"), date: Date())
     }
 }

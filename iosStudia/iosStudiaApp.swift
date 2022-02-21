@@ -1,10 +1,3 @@
-//
-//  iosStudiaApp.swift
-//  iosStudia
-//
-//  Created by 이종우 on 2022/01/06.
-//
-
 import SwiftUI
 import Firebase
 import GoogleSignIn
@@ -14,10 +7,10 @@ struct iosStudiaApp: App {
     init() {
         FirebaseApp.configure()
         
-        // Set default value for settings
+        // Set default value
         UserDefaults.standard.register(defaults: [
-            "persistence": true,
-            "isAppAlreadyLaunchedOnce": false
+            "persistence": true,                // Persistence in user preferences
+            "isAppAlreadyLaunchedOnce": false   // For showing TurorialView at first launch
         ])
         
         // Set persistence for firebase database
@@ -32,10 +25,13 @@ struct iosStudiaApp: App {
                 } else {
                     LoginView()
                         .onOpenURL { url in
+                            // Handle URL after Google Signin
                             GIDSignIn.sharedInstance.handle(url)
                         }
                 }
             } else {
+                // App launched for the first time
+                // Show tutorial view
                 TurorialView()
             }
             

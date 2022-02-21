@@ -1,18 +1,12 @@
-//
-//  LoginView.swift
-//  iosStudia
-//
-//  Created by 이종우 on 2022/01/06.
-//
-
 import SwiftUI
 import Firebase
 import GoogleSignIn
 
 struct LoginView: View {
-    @State var email: String = ""
-    @State var password: String = ""
-    @State var isLoggedIn: Bool = false
+    @State private var email: String = ""           // User input for email
+    @State private var password: String = ""        // User input for password
+    @State private var isLoggedIn: Bool = false     // Navigate to CalendarView when true
+    @State private var loginFailed: Bool = false    // Show "login failed" popup
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -23,6 +17,7 @@ struct LoginView: View {
             Text("이메일 주소")
                 .font(.caption)
                 .padding(.leading, 15)
+            
             HStack {
                 TextField("email@example.com", text: $email)
                     .disableAutocorrection(true)
@@ -37,6 +32,7 @@ struct LoginView: View {
             Text("비밀번호")
                 .font(.caption)
                 .padding(.leading, 15)
+            
             HStack {
                 SecureField("• • • • • • • •", text: $password)
                     .disableAutocorrection(true)
@@ -79,11 +75,10 @@ struct LoginView: View {
                 Auth.auth().signIn(withEmail: email, password: password) {(user, error)in
                     if(user != nil) {
                         // Logged in
-                        print("--> Logged in as \(Auth.auth().currentUser?.email ?? "no user")")
-                        isLoggedIn = true
+                        self.isLoggedIn = true
                     } else {
-                        // Login failed
-                        print("--> Failed to Log In With Email and Password")
+                        // Login failed, show alert
+                        self.loginFailed = true
                     }
                 }
             }) {
@@ -101,28 +96,20 @@ struct LoginView: View {
                 
                 // Start Signin flow
                 GIDSignIn.sharedInstance.signIn(with: config, presenting: (UIApplication.shared.windows.first?.rootViewController)!) { user, error in
-                    if let error = error {
-                        print(error.localizedDescription)
-                        return
-                    }
+                    if error != nil { return }
                     
                     guard
                         let authentication = user?.authentication,
                         let idToken = authentication.idToken
-                    else {
-                        return
-                    }
+                    else { return }
                     
                     let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: authentication.accessToken)
                     
                     // Firebase Auth with Credential
                     Auth.auth().signIn(with: credential) { (authResult, error) in
-                        if let error = error {
-                            print("--> Error While Google Login: \(error.localizedDescription)")
-                            return
-                        }
+                        if error != nil { return }
                         
-                        // Signed in. Woohoo!
+                        // Signed in successfully
                         isLoggedIn = true
                     }
                 }
@@ -147,15 +134,16 @@ struct LoginView: View {
         .frame(minWidth: 0, maxWidth: 500)
         .padding()
         .navigate(to: CalendarView(), when: $isLoggedIn)
+        .alert(isPresented: $loginFailed) {
+            Alert(title: Text("로그인 실패"),
+                  message: Text("가입되지 않은 아이디이거나 비밀번호가 잘못되었습니다."),
+                  dismissButton: .default(Text("확인"))
+            )
+        }
     }
 }
 
-struct LoginView_Previews: PreviewProvider {
-    static var previews: some View {
-        LoginView()
-    }
-}
-
+// Navigate without NavigationView
 extension View {
     func navigate<NewView: View>(to view: NewView, when binding: Binding<Bool>) -> some View {
         NavigationView {
@@ -175,5 +163,11 @@ extension View {
             }
         }
         .navigationViewStyle(.stack)
+    }
+}
+
+struct LoginView_Previews: PreviewProvider {
+    static var previews: some View {
+        LoginView()
     }
 }

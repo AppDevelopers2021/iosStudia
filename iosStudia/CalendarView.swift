@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  iosStudia
-//
-//  Created by 이종우 on 2022/01/06.
-//
-
 import SwiftUI
 import Firebase
 import GoogleSignIn
@@ -17,22 +10,22 @@ struct Note: Identifiable {
 }
 
 struct CalendarView: View {
-    @State var selectedDate: Date = Date()      // Date selected from date picker
-    @State var isPickerOpen: Bool = false       // Used to show & hide date picker
-    @State var memo = ""                        // Memo value to display
-    @State var reminders = ""                   // Reminders to display
-    @State var reminderArray: NSArray = []      // Array of reminders (to pass to ReminderDetailsView
-    @State var notes: [Note] = []               // Notes to display
-    @State private var showAddNoteModal = false // Show "Add Note" Modal
-    @State private var showAccountModal = false // Show Account Modal
-    @State var isLoggedOut = false
+    @State private var selectedDate: Date = Date()  // Date selected from date picker
+    @State private var isPickerOpen: Bool = false   // Used to show & hide date picker
+    @State private var memo = ""                    // Memo value to display
+    @State private var reminders = ""               // Reminders to display
+    @State private var reminderArray: NSArray = []  // Array of reminders (to pass to ReminderDetailsView
+    @State private var notes: [Note] = []           // Notes to display
+    @State private var showAddNoteModal = false     // Show "Add Note" Modal
+    @State private var showAccountModal = false     // Show Account Modal
     
-    
+    // Format date to display on screen
     let formatDisplay: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "YYYY / MM / dd"
         return formatter
     }()
+    // Format date for Firebase DB
     let formatForDB: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "YYYYMMdd"
@@ -40,11 +33,13 @@ struct CalendarView: View {
     }()
     
     func load() {
-        guard let uid = Auth.auth().currentUser?.uid else { return }
+        // Take a snapshot of the DB and parse it
+        guard let uid = Auth.auth().currentUser?.uid else { return }    // User UID (Unique ID)
         Database.database().reference().child("calendar/\(uid)/\(formatForDB.string(from: selectedDate))").observe(DataEventType.value, with: { snapshot in
             if let fetchedData = snapshot.value as? NSDictionary {
-                // Show notes
+                // Parse notes
                 if let fetchedNotes = fetchedData["note"] as? NSArray {
+                    // Store notes from DB as Note identifiable
                     var noteList: [Note] = []
                     for i in 0..<fetchedNotes.count {
                         if let currentNote = fetchedNotes[i] as? NSDictionary {
@@ -52,19 +47,20 @@ struct CalendarView: View {
                         } else { self.notes = [] }
                     }
                     self.notes = noteList
-                } else { self.notes = [] }
+                } else { self.notes = [] }      // Content doesn't exsist
                 
-                // Show memo
+                // Parse & show memo
                 if let fetchedMemo = fetchedData["memo"] as? String {
                     self.memo = fetchedMemo
-                } else { self.memo = "" }
+                } else { self.memo = "" }       // Content doesn't exsist
                 
-                // Show reminders
+                // Parse & show reminders
                 if let fetchedReminderArray = fetchedData["reminder"] as? NSArray {
                     self.reminderArray = fetchedReminderArray
                     self.reminders = " • " + fetchedReminderArray.map({"\($0)"}).joined(separator: "\n • ")
-                } else { self.reminders = "" }
+                } else { self.reminders = "" }  // Content doesn't exsist
             } else {
+                // Content doesn't exsist
                 self.notes = []
                 self.memo = ""
                 self.reminders = ""
@@ -82,9 +78,9 @@ struct CalendarView: View {
                     ScrollView {
                         VStack(spacing: 15) {
                             HStack {
-                                // Date Navigation
+                                // Date navigation
                                 Button(action: {
-                                    // Date Back
+                                    // Date - 1day
                                     selectedDate -= 86400
                                     load()
                                 }) {
@@ -104,7 +100,7 @@ struct CalendarView: View {
                                         .font(.system(size: 25))
                                 }
                                 Button(action: {
-                                    // Date Forward
+                                    // Date + 1day
                                     selectedDate += 86400
                                     load()
                                 }) {
@@ -115,6 +111,7 @@ struct CalendarView: View {
                                 }
                                 Spacer()
                                 
+                                // Add Note button
                                 Button(action: {
                                     self.showAddNoteModal = true
                                 }) {
@@ -133,6 +130,7 @@ struct CalendarView: View {
                                     .datePickerStyle(WheelDatePickerStyle())
                                     .labelsHidden()
                                     .onChange(of: selectedDate, perform: { _newValue in
+                                        // User changes the picker value
                                         load()
                                     })
                             }
@@ -168,6 +166,7 @@ struct CalendarView: View {
                             )
                             
                             if geometry.size.width < geometry.size.height {
+                                // In portrait mode: show in a row
                                 VStack {
                                     NavigationLink(destination: MemoDetailsView(memoContent: memo, date: selectedDate)) {
                                         VStack(alignment: .leading, spacing: 10) {
@@ -203,6 +202,7 @@ struct CalendarView: View {
                                     .cornerRadius(10)
                                 }
                             } else {
+                                // In landscape mode: show horizontally
                                 HStack {
                                     NavigationLink(destination: MemoDetailsView(memoContent: memo, date: selectedDate)) {
                                         VStack(alignment: .leading, spacing: 10) {
@@ -243,6 +243,7 @@ struct CalendarView: View {
                         .background(Color("BgColor"))
                         .navigationTitle("내 캘린더")
                         .toolbar {
+                            // Settings icon
                             ToolbarItem(placement: .navigationBarTrailing) {
                                 Button(action: {
                                     self.showAccountModal = true
@@ -256,6 +257,7 @@ struct CalendarView: View {
                             }
                         }
                         .onAppear {
+                            // Change Navigation Bar background color
                             let navigationBarAppearance = UINavigationBar.appearance()
                             navigationBarAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
                             navigationBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
@@ -274,15 +276,17 @@ struct CalendarView: View {
 }
 
 struct AddNoteModalView: View {
-    @State var idx: Int
-    @State var date: String
+    var idx: Int
+    var date: String
     
-    @State private var selectedSubject: String = "국어"
-    @State private var selectedOptionalSubject: String = ""
-    @State private var inputContent: String = ""
+    @State private var selectedSubject: String = "국어"       // Selected subject
+    @State private var selectedOptionalSubject: String = "" // Subject in "Other" mode
+    @State private var inputContent: String = ""            // Content input by user
+    
+    // Full list of all subjects
     let subjects = ["가정", "과학", "국어", "기술", "도덕", "독서", "미술", "보건", "사회", "수학", "영어", "음악", "정보", "진로", "창체", "체육", "환경", "자율", "기타"]
     
-    @Environment (\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
         Group {
@@ -300,6 +304,7 @@ struct AddNoteModalView: View {
                             .padding(.trailing, 50)
                             
                             if selectedSubject == "기타" {
+                                // User selected "Other"
                                 TextField("직접 입력", text: $selectedOptionalSubject)
                                     .accentColor(.blue)
                             }
@@ -324,15 +329,15 @@ struct AddNoteModalView: View {
                     
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
-                            if inputContent != "" {
+                            if inputContent != "" {                         // Prevent writing empty string to DB
                                 guard let uid = Auth.auth().currentUser?.uid else { return }
-                                if selectedSubject == "기타" {
+                                if selectedSubject == "기타" {               // Use optional subject instead
                                     Database.database().reference().child("calendar/\(uid)/\(date)/note/\(idx)").setValue(["subject": selectedOptionalSubject, "content": inputContent])
                                 } else {
                                     Database.database().reference().child("calendar/\(uid)/\(date)/note/\(idx)").setValue(["subject": selectedSubject, "content": inputContent])
                                 }
                             }
-                            self.presentationMode.wrappedValue.dismiss()
+                            self.presentationMode.wrappedValue.dismiss()    // Close modal
                         }) {
                             Text("완료")
                         }
@@ -341,6 +346,7 @@ struct AddNoteModalView: View {
             }
             .accentColor(.white)
             .onAppear {
+                // Put form bg color back to normal, after user visits NoteDetailsView
                 UITableView.appearance().backgroundColor = UIColor.systemGroupedBackground
             }
         }
@@ -348,9 +354,9 @@ struct AddNoteModalView: View {
 }
 
 struct SettingsModalView: View {
-    @Environment (\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Environment(\.openURL) var openURL
-    @AppStorage("persistence") var persistence: Bool = UserDefaults.standard.bool(forKey: "persistence")
+    @AppStorage("persistence") var persistence: Bool = UserDefaults.standard.bool(forKey: "persistence")    // User preferences for offline persistence
     
     var body: some View {
         NavigationView {
@@ -426,16 +432,16 @@ struct SettingsModalView: View {
         }
         .accentColor(.white)
         .onAppear {
+            // Put form bg color back to normal, after user visits NoteDetailsView
             UITableView.appearance().backgroundColor = UIColor.systemGroupedBackground
         }
     }
 }
 
 struct AccountModalView: View {
-    @State private var showingLogOutSheet: Bool = false
-    @State private var showingDeleteSheet: Bool = false
-    @State private var showingLoggedOutAlert: Bool = false
-    @State private var showDeleteAccountModal: Bool = false
+    @State private var showingLogOutSheet: Bool = false         // Show "Wanna log out?" action sheet
+    @State private var showingLoggedOutAlert: Bool = false      // Show restart alert
+    @State private var showDeleteAccountModal: Bool = false     // Show reauthentication modal
     
     var body: some View {
         VStack {
@@ -508,11 +514,11 @@ struct AccountModalView: View {
 }
 
 struct DeleteAccountModalView: View {
-    @Environment (\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
-    @State private var password: String = ""
-    @State private var showingRestartAlert: Bool = false
-    @State private var showingDeleteSheeet: Bool = false
+    @State private var password: String = ""                // Password input
+    @State private var showingRestartAlert: Bool = false    // Show restart alert
+    @State private var showingDeleteSheeet: Bool = false    // Show "Delete account?" action sheet
     
     var body: some View {
         NavigationView {
@@ -539,9 +545,7 @@ struct DeleteAccountModalView: View {
                 Button(action: {
                     let credential: AuthCredential = EmailAuthProvider.credential(withEmail: Auth.auth().currentUser?.email ?? "", password: password)
                     Auth.auth().currentUser?.reauthenticate(with: credential) { result, error in
-                        if error != nil {
-                            // Error
-                        } else {
+                        if error == nil {
                             // Reauthenticated
                             self.showingDeleteSheeet = true
                         }
@@ -563,9 +567,7 @@ struct DeleteAccountModalView: View {
                         Database.database().reference().child("calendar/\(uid)").removeValue()
                         
                         Auth.auth().currentUser?.delete { error in
-                            if error != nil {
-                                // An error happened.
-                            } else {
+                            if error == nil {
                                 // Account deleted.
                                 self.showingRestartAlert = true
                             }
@@ -587,16 +589,12 @@ struct DeleteAccountModalView: View {
                         guard
                             let authentication = user?.authentication,
                             let idToken = authentication.idToken
-                        else {
-                            return
-                        }
+                        else { return }
                         
                         let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: authentication.accessToken)
                         
                         Auth.auth().currentUser?.reauthenticate(with: credential) { result, error in
-                            if error != nil {
-                                // Error
-                            } else {
+                            if error == nil {
                                 // Reauthenticated
                                 self.showingDeleteSheeet = true
                             }
@@ -647,13 +645,5 @@ struct DeleteAccountModalView: View {
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
         CalendarView()
-        DeleteAccountModalView()
-        //.preferredColorScheme(.dark)
-    }
-}
-
-extension String {
-    var localized: String {
-        return NSLocalizedString(self, tableName: "Localizable", value: self, comment: "")
     }
 }

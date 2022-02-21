@@ -83,7 +83,6 @@
 			children = (
 				011A40EE2786771A00A9264D /* Info.plist */,
 				01EA303827BF8E000052FAE5 /* GoogleService-Info.plist */,
-				01EA303E27BF8ED00052FAE5 /* Localizable.strings */,
 				011A40DE2786738500A9264D /* iosStudiaApp.swift */,
 				014685C927BFDDBD00E03B27 /* TurorialView.swift */,
 				01F401D927868BE000FEC7F6 /* LoginView.swift */,
@@ -91,8 +90,9 @@
 				01BAA3DE27883634003A6499 /* NoteDetailsView.swift */,
 				01D253D02787BC6200A71317 /* MemoDetailsView.swift */,
 				0108D04227ABBD1D00B2D46C /* ReminderDetailsView.swift */,
-				01F401DB27868CB900FEC7F6 /* NanumSquare_acB.ttf */,
 				011A40E22786738600A9264D /* Assets.xcassets */,
+				01F401DB27868CB900FEC7F6 /* NanumSquare_acB.ttf */,
+				01EA303E27BF8ED00052FAE5 /* Localizable.strings */,
 				011A40E42786738600A9264D /* Preview Content */,
 			);
 			path = iosStudia;
