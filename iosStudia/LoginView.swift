@@ -21,6 +21,7 @@ struct LoginView: View {
             HStack {
                 TextField("email@example.com", text: $email)
                     .disableAutocorrection(true)
+                    .keyboardType(.emailAddress)
                     .autocapitalization(.none)
                     .padding(.leading, 15)
             }

@@ -16,13 +16,13 @@ struct TurorialView: View {
                     ForEach((0..<4), id: \.self) { index in
                         VStack {
                             Text(texts[index])
-                                .font(Font.custom("NanumSquare_ac Bold", size: 30))
+                                .font(Font.custom("NanumSquare_ac Bold", size: 28))
                                 .padding()
                                 .multilineTextAlignment(.center)
                             Image("welcome_" + String(index))
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(minHeight: 400)
+                                .frame(minHeight: 350)
                         }
                     }
                 }
