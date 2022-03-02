@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0108D04327ABBD1D00B2D46C /* ReminderDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0108D04227ABBD1D00B2D46C /* ReminderDetailsView.swift */; };
+		0111552B27CF090C0038B73D /* SignInWithApple.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0111552A27CF090C0038B73D /* SignInWithApple.swift */; };
 		011A40DF2786738500A9264D /* iosStudiaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011A40DE2786738500A9264D /* iosStudiaApp.swift */; };
 		011A40E12786738500A9264D /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011A40E02786738500A9264D /* CalendarView.swift */; };
 		011A40E32786738600A9264D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 011A40E22786738600A9264D /* Assets.xcassets */; };
@@ -29,6 +30,8 @@
 
 /* Begin PBXFileReference section */
 		0108D04227ABBD1D00B2D46C /* ReminderDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDetailsView.swift; sourceTree = "<group>"; };
+		0111552927CF04150038B73D /* iosStudia.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iosStudia.entitlements; sourceTree = "<group>"; };
+		0111552A27CF090C0038B73D /* SignInWithApple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithApple.swift; sourceTree = "<group>"; };
 		011A40DB2786738500A9264D /* iosStudia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosStudia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		011A40DE2786738500A9264D /* iosStudiaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iosStudiaApp.swift; sourceTree = "<group>"; };
 		011A40E02786738500A9264D /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
@@ -81,11 +84,13 @@
 		011A40DD2786738500A9264D /* iosStudia */ = {
 			isa = PBXGroup;
 			children = (
+				0111552927CF04150038B73D /* iosStudia.entitlements */,
 				011A40EE2786771A00A9264D /* Info.plist */,
 				01EA303827BF8E000052FAE5 /* GoogleService-Info.plist */,
 				011A40DE2786738500A9264D /* iosStudiaApp.swift */,
 				014685C927BFDDBD00E03B27 /* TurorialView.swift */,
 				01F401D927868BE000FEC7F6 /* LoginView.swift */,
+				0111552A27CF090C0038B73D /* SignInWithApple.swift */,
 				011A40E02786738500A9264D /* CalendarView.swift */,
 				01BAA3DE27883634003A6499 /* NoteDetailsView.swift */,
 				01D253D02787BC6200A71317 /* MemoDetailsView.swift */,
@@ -198,6 +203,7 @@
 				01F401DA27868BE000FEC7F6 /* LoginView.swift in Sources */,
 				011A40E12786738500A9264D /* CalendarView.swift in Sources */,
 				011A40DF2786738500A9264D /* iosStudiaApp.swift in Sources */,
+				0111552B27CF090C0038B73D /* SignInWithApple.swift in Sources */,
 				01BAA3DF27883634003A6499 /* NoteDetailsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -340,6 +346,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = iosStudia/iosStudia.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -371,6 +378,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = iosStudia/iosStudia.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"iosStudia/Preview Content\"";
