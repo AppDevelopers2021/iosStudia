@@ -10,8 +10,8 @@ struct LoginView: View {
     @State private var password: String = ""        // User input for password
     @State private var isLoggedIn: Bool = false     // Navigate to CalendarView when true
     @State private var loginFailed: Bool = false    // Show "login failed" popup
-    @State var showSafari: Bool = false
-    @State var urlString: String = "https://google.com"
+    @State private var showSignUpSheet: Bool = false
+    @State private var showIforgotSheet: Bool = false
     @State fileprivate var currentNonce: String?
     
     @Environment(\.colorScheme) var colorScheme
@@ -98,31 +98,34 @@ struct LoginView: View {
             
             HStack {
                 Button(action: {
-                    self.urlString = "https://studia.blue/signup"
-                    self.showSafari = true
+                    self.showSignUpSheet = true
                 }) {
                     Text("계정 만들기")
                         .font(.body)
                         .foregroundColor(Color.black)
                 }
                 .frame(height: 30)
+                .sheet(isPresented: $showSignUpSheet) {
+                    SafariView(url:URL(string: "https://studia.blue/signup")!)
+                        .edgesIgnoringSafeArea(.bottom)
+                }
                 
                 Spacer()
                 
                 Button(action: {
-                    self.urlString = "https://studia.blue/iforgot"
-                    self.showSafari = true
+                    self.showIforgotSheet = true
                 }) {
                     Text("비밀번호 찾기")
                         .font(.body)
                         .foregroundColor(Color.black)
                 }
                 .frame(height: 30)
+                .sheet(isPresented: $showIforgotSheet) {
+                    SafariView(url:URL(string: "https://studia.blue/iforgot")!)
+                        .edgesIgnoringSafeArea(.bottom)
+                }
             }
             .padding(10)
-            .sheet(isPresented: $showSafari) {
-                SafariView(url:URL(string: self.urlString)!)
-            }
             
             Button(action: {
                 Auth.auth().signIn(withEmail: email, password: password) {(user, error)in
@@ -279,8 +282,7 @@ struct SafariView: UIViewControllerRepresentable {
         return SFSafariViewController(url: url)
     }
 
-    func updateUIViewController(_ uiViewController: SFSafariViewController, context: UIViewControllerRepresentableContext<SafariView>) {
-    }
+    func updateUIViewController(_ uiViewController: SFSafariViewController, context: UIViewControllerRepresentableContext<SafariView>) { }
 }
 
 struct LoginView_Previews: PreviewProvider {
