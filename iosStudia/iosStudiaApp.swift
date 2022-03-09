@@ -9,8 +9,7 @@ struct iosStudiaApp: App {
         
         // Set default value
         UserDefaults.standard.register(defaults: [
-            "persistence": true,                // Persistence in user preferences
-            "isAppAlreadyLaunchedOnce": false   // For showing TurorialView at first launch
+            "persistence": true             // Persistence in user preferences
         ])
         
         // Set persistence for firebase database
@@ -19,20 +18,14 @@ struct iosStudiaApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if UserDefaults.standard.bool(forKey: "isAppAlreadyLaunchedOnce") {
-                if Auth.auth().currentUser != nil {
-                    CalendarView()
-                } else {
-                    LoginView()
-                        .onOpenURL { url in
-                            // Handle URL after Google Signin
-                            GIDSignIn.sharedInstance.handle(url)
-                        }
-                }
+            if Auth.auth().currentUser != nil {
+                CalendarView()
             } else {
-                // App launched for the first time
-                // Show tutorial view
-                TurorialView()
+                LoginView()
+                    .onOpenURL { url in
+                        // Handle URL after Google Signin
+                        GIDSignIn.sharedInstance.handle(url)
+                    }
             }
             
         }

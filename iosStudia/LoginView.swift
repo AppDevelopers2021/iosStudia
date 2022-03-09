@@ -6,8 +6,6 @@ import CryptoKit
 import AuthenticationServices
 
 struct LoginView: View {
-    @State private var email: String = ""           // User input for email
-    @State private var password: String = ""        // User input for password
     @State private var isLoggedIn: Bool = false     // Navigate to CalendarView when true
     @State private var loginFailed: Bool = false    // Show "login failed" popup
     @State private var showSignUpSheet: Bool = false
@@ -61,74 +59,17 @@ struct LoginView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("나만의\n독창적인 공부\n스타일 찾기")
-                .font(Font.custom("NanumSquare_ac Bold", size: 40))
-                .padding(.bottom, 30)
+            Text("studia")
+                .font(Font.custom("Courgette Regular", size: 40))
+                .foregroundColor(Color("ThemeColor"))
             
-            Text("이메일 주소")
-                .font(.caption)
-                .padding(.leading, 15)
+            Text("시작하기")
+                .font(Font.custom("NanumSquare_ac Bold", size: 50))
             
-            HStack {
-                TextField("email@example.com", text: $email)
-                    .disableAutocorrection(true)
-                    .keyboardType(.emailAddress)
-                    .autocapitalization(.none)
-                    .padding(.leading, 15)
-            }
-            .frame(height: 40)
-            .background(Color("TextFieldBgColor"))
-            .cornerRadius(20)
-            .padding(.bottom, 10)
-            
-            Text("비밀번호")
-                .font(.caption)
-                .padding(.leading, 15)
-            
-            HStack {
-                SecureField("• • • • • • • •", text: $password)
-                    .disableAutocorrection(true)
-                    .autocapitalization(.none)
-                    .padding(.leading, 15)
-            }
-            .frame(height: 40)
-            .background(Color("TextFieldBgColor"))
-            .cornerRadius(20)
-            .padding(.bottom, 10)
-            
-            HStack {
-                Button(action: {
-                    self.showSignUpSheet = true
-                }) {
-                    Text("계정 만들기")
-                        .font(.body)
-                        .foregroundColor(Color.black)
-                }
-                .frame(height: 30)
-                .sheet(isPresented: $showSignUpSheet) {
-                    SafariView(url:URL(string: "https://studia.blue/signup")!)
-                        .edgesIgnoringSafeArea(.bottom)
-                }
-                
-                Spacer()
-                
-                Button(action: {
-                    self.showIforgotSheet = true
-                }) {
-                    Text("비밀번호 찾기")
-                        .font(.body)
-                        .foregroundColor(Color.black)
-                }
-                .frame(height: 30)
-                .sheet(isPresented: $showIforgotSheet) {
-                    SafariView(url:URL(string: "https://studia.blue/iforgot")!)
-                        .edgesIgnoringSafeArea(.bottom)
-                }
-            }
-            .padding(10)
+            //
             
             Button(action: {
-                Auth.auth().signIn(withEmail: email, password: password) {(user, error)in
+                /*Auth.auth().signIn(withEmail: email, password: password) {(user, error)in
                     if(user != nil) {
                         // Logged in
                         self.isLoggedIn = true
@@ -136,7 +77,7 @@ struct LoginView: View {
                         // Login failed, show alert
                         self.loginFailed = true
                     }
-                }
+                }*/
             }) {
                 Text("로그인")
                     .font(.system(size: 15, weight: .medium))
@@ -274,15 +215,65 @@ extension View {
     }
 }
 
-// Safari popup
-struct SafariView: UIViewControllerRepresentable {
-    let url: URL
-
-    func makeUIViewController(context: UIViewControllerRepresentableContext<SafariView>) -> SFSafariViewController {
-        return SFSafariViewController(url: url)
+struct PWLoginView: View {
+    @State private var email: String = ""           // User input for email
+    @State private var password: String = ""        // User input for password
+    
+    var body: some View {
+        Text("이메일 주소")
+            .font(.caption)
+            .padding(.leading, 15)
+        
+        HStack {
+            TextField("email@example.com", text: $email)
+                .disableAutocorrection(true)
+                .keyboardType(.emailAddress)
+                .autocapitalization(.none)
+                .padding(.leading, 15)
+        }
+        .frame(height: 40)
+        .background(Color("TextFieldBgColor"))
+        .cornerRadius(20)
+        .padding(.bottom, 10)
+        
+        Text("비밀번호")
+            .font(.caption)
+            .padding(.leading, 15)
+        
+        HStack {
+            SecureField("• • • • • • • •", text: $password)
+                .disableAutocorrection(true)
+                .autocapitalization(.none)
+                .padding(.leading, 15)
+        }
+        .frame(height: 40)
+        .background(Color("TextFieldBgColor"))
+        .cornerRadius(20)
+        .padding(.bottom, 10)
+        
+        HStack {
+            Button(action: {
+                //
+            }) {
+                Text("계정 만들기")
+                    .font(.body)
+                    .foregroundColor(Color.black)
+            }
+            .frame(height: 30)
+            
+            Spacer()
+            
+            Button(action: {
+                //
+            }) {
+                Text("비밀번호 찾기")
+                    .font(.body)
+                    .foregroundColor(Color.black)
+            }
+            .frame(height: 30)
+        }
+        .padding(10)
     }
-
-    func updateUIViewController(_ uiViewController: SFSafariViewController, context: UIViewControllerRepresentableContext<SafariView>) { }
 }
 
 struct LoginView_Previews: PreviewProvider {

@@ -17,6 +17,7 @@
 	</array>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Courgette-Regular.ttf</string>
 		<string>NanumSquare_acB.ttf</string>
 	</array>
 	<key>UILaunchScreen</key>

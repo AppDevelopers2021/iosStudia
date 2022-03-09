@@ -6,12 +6,11 @@
   
 */
 
-"나만의\n독창적인 공부\n스타일 찾기" = "Studying made easier with STUDIA";
 "이메일 주소" = "Email Address";
 "비밀번호" = "Password";
 "계정 만들기" = "Sign Up";
 "비밀번호 찾기" = "Forgot Password?";
-"로그인" = "Sign In";
+"로그인" = "Sign in with Password";
 "Google 계정으로 로그인" = "Sign in with Google";
 "메모" = "Memo";
 "과제 및 준비물" = "To Do";
@@ -56,11 +55,3 @@
 "편집" = "Edit";
 "항목 추가" = "Add Item";
 "메모 내용 입력" = "Memo";
-"과목별로 배운 내용을 노트로 작성하세요" = "Take Notes On What You've Learned";
-"메모로 중요한 사항을 놓치지 마세요" = "Remember Important Stuff with Memo";
-"과제 및 준비물로 할 일을 정리하세요" = "Organize Tasks with To-Dos";
-"준비되었습니다" = "You're All Set Up";
-"건너뛰기" = "Skip";
-"시작하기" = "Got It";
-"이전" = "Back";
-"다음" = "Next";
