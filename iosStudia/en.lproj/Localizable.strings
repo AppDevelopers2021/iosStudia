@@ -6,12 +6,14 @@
   
 */
 
+"시작하기" = "Start STUDIA";
 "이메일 주소" = "Email Address";
 "비밀번호" = "Password";
 "계정 만들기" = "Sign Up";
 "비밀번호 찾기" = "Forgot Password?";
-"로그인" = "Sign in with Password";
-"Google 계정으로 로그인" = "Sign in with Google";
+"이메일, 비밀번호로 로그인" = "Sign in with Password";
+"Google로 로그인" = "Sign in with Google";
+"로그인" = "Sign In";
 "메모" = "Memo";
 "과제 및 준비물" = "To Do";
 "내 캘린더" = "My Calendar";
