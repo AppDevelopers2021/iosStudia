@@ -72,8 +72,8 @@ struct LoginView: View {
             NavigationLink(destination: PWLoginView()) {
                 Label("이메일, 비밀번호로 로그인", systemImage: "key.fill")
                     .font(.system(size: 17, weight: .medium))
+                    .frame(minWidth: 0, maxWidth: .infinity)
             }
-            .frame(minWidth: 0, maxWidth: .infinity)
             .frame(height: 45, alignment: .center)
             .background(Color("LoginBtnColor"))
             .foregroundColor(Color.white)
@@ -111,8 +111,8 @@ struct LoginView: View {
                         .resizable()
                         .frame(width: 17, height: 17)
                 }
+                .frame(minWidth: 0, maxWidth: .infinity)
             }
-            .frame(minWidth: 0, maxWidth: .infinity)
             .frame(height: 45, alignment: .center)
             .background(Color("BgColor"))
             .cornerRadius(10)
@@ -135,9 +135,10 @@ struct LoginView: View {
         .frame(minWidth: 0, maxWidth: 500)
         .padding()
         .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
         .alert(isPresented: $loginFailed) {
             Alert(title: Text("로그인 실패"),
-                  message: Text("가입되지 않은 아이디이거나 비밀번호가 잘못되었습니다."),
+                  message: Text("로그인 중 문제가 발생하였습니다."),
                   dismissButton: .default(Text("확인"))
             )
         }
@@ -191,6 +192,8 @@ struct PWLoginView: View {
     @State private var loading: Bool = false        // Show spinner when true
     @State private var isLoggedIn: Bool = false     // Navigate to CalendarView when true
     @State private var loginFailed: Bool = false    // Show "login failed" popup
+    @State private var showSignUpSheet: Bool = false
+    @State private var showIforgotSheet: Bool = false
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -229,24 +232,32 @@ struct PWLoginView: View {
             
             HStack {
                 Button(action: {
-                    //
+                    self.showSignUpSheet = true
                 }) {
                     Text("계정 만들기")
                         .font(.body)
                         .foregroundColor(Color.black)
                 }
                 .frame(height: 30)
+                .sheet(isPresented: $showSignUpSheet) {
+                    SafariView(url:URL(string: "https://studia.blue/signup")!)
+                        .edgesIgnoringSafeArea(.bottom)
+                }
                 
                 Spacer()
                 
                 Button(action: {
-                    //
+                    self.showIforgotSheet = true
                 }) {
                     Text("비밀번호 찾기")
                         .font(.body)
                         .foregroundColor(Color.black)
                 }
                 .frame(height: 30)
+                .sheet(isPresented: $showIforgotSheet) {
+                    SafariView(url:URL(string: "https://studia.blue/iforgot")!)
+                        .edgesIgnoringSafeArea(.bottom)
+                }
             }
             .padding(10)
             
@@ -266,12 +277,13 @@ struct PWLoginView: View {
                 if self.loading {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .frame(minWidth: 0, maxWidth: .infinity)
                 } else {
                     Text("로그인")
                         .font(.system(size: 17, weight: .medium))
+                        .frame(minWidth: 0, maxWidth: .infinity)
                 }
             }
-            .frame(minWidth: 0, maxWidth: .infinity)
             .frame(height: 45, alignment: .center)
             .background(Color("ThemeColor"))
             .foregroundColor(Color.white)
@@ -305,6 +317,15 @@ struct LoginFinishedView: View {
             self.go = true
         }
     }
+}
+
+struct SafariView: UIViewControllerRepresentable {
+    let url: URL
+    func makeUIViewController(context: UIViewControllerRepresentableContext<SafariView>) -> SFSafariViewController {
+        return SFSafariViewController(url: url)
+    }
+    
+    func updateUIViewController(_ uiViewController: SFSafariViewController, context: UIViewControllerRepresentableContext<SafariView>) { }
 }
 
 struct LoginView_Previews: PreviewProvider {

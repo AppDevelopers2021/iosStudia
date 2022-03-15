@@ -18,6 +18,7 @@ struct CalendarView: View {
     @State private var notes: [Note] = []           // Notes to display
     @State private var showAddNoteModal = false     // Show "Add Note" Modal
     @State private var showAccountModal = false     // Show Account Modal
+    @State private var loggedOut: Bool = false      // Navigate to LoginView When User Signs Out
     
     // Format date to display on screen
     let formatDisplay: DateFormatter = {
@@ -76,6 +77,8 @@ struct CalendarView: View {
                 GeometryReader { geometry in
                     ScrollView {
                         VStack(spacing: 15) {
+                            NavigationLink(destination: LoginView().accentColor(.blue), isActive: $loggedOut) { EmptyView() }
+                            
                             HStack {
                                 // Date navigation
                                 Button(action: {
@@ -252,7 +255,7 @@ struct CalendarView: View {
                                         .font(.system(size: 40))
                                 }
                                 .sheet(isPresented: self.$showAccountModal) {
-                                    SettingsModalView()
+                                    SettingsModalView(loggedOut: $loggedOut)
                                 }
                             }
                         }
@@ -354,12 +357,13 @@ struct SettingsModalView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Environment(\.openURL) var openURL
     @AppStorage("persistence") var persistence: Bool = UserDefaults.standard.bool(forKey: "persistence")    // User preferences for offline persistence
+    @Binding var loggedOut: Bool
     
     var body: some View {
         NavigationView {
             VStack {
                 Form {
-                    NavigationLink(destination: AccountModalView()) {
+                    NavigationLink(destination: AccountModalView(loggedOut: $loggedOut, settingsModal: presentationMode)) {
                         HStack(spacing: 15) {
                             Image(systemName: "person.crop.circle.fill")
                                 .resizable()
@@ -437,8 +441,9 @@ struct SettingsModalView: View {
 
 struct AccountModalView: View {
     @State private var showingLogOutSheet: Bool = false         // Show "Wanna log out?" action sheet
-    @State private var showingLoggedOutAlert: Bool = false      // Show restart alert
     @State private var showDeleteAccountModal: Bool = false     // Show reauthentication modal
+    @Binding var loggedOut: Bool
+    @Binding var settingsModal: PresentationMode
     
     var body: some View {
         VStack {
@@ -482,7 +487,8 @@ struct AccountModalView: View {
                         Button("로그아웃", role: .destructive) {
                             do {
                                 try Auth.auth().signOut()
-                                self.showingLoggedOutAlert = true
+                                self.loggedOut = true
+                                settingsModal.dismiss()
                             } catch let signOutError as NSError {
                                 print("Error signing out: %@", signOutError)
                             }
@@ -494,19 +500,13 @@ struct AccountModalView: View {
                     }
                     .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .center)
                     .sheet(isPresented: self.$showDeleteAccountModal) {
-                        DeleteAccountModalView()
+                        DeleteAccountModalView(loggedOut: $loggedOut, settingsModal: $settingsModal)
                     }
                 }
             }
         }
         .navigationTitle("계정 관리")
         .navigationBarTitleDisplayMode(.inline)
-        .alert(isPresented: $showingLoggedOutAlert) {
-            Alert(title: Text("앱 재시작 필요"),
-                  message: Text("로그아웃되었습니다. 앱을 재시작해주세요."),
-                  dismissButton: .default(Text("확인"))
-            )
-        }
     }
 }
 
@@ -514,8 +514,9 @@ struct DeleteAccountModalView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @State private var password: String = ""                // Password input
-    @State private var showingRestartAlert: Bool = false    // Show restart alert
     @State private var showingDeleteSheeet: Bool = false    // Show "Delete account?" action sheet
+    @Binding var loggedOut: Bool
+    @Binding var settingsModal: PresentationMode
     
     var body: some View {
         NavigationView {
@@ -566,7 +567,8 @@ struct DeleteAccountModalView: View {
                         Auth.auth().currentUser?.delete { error in
                             if error == nil {
                                 // Account deleted.
-                                self.showingRestartAlert = true
+                                self.loggedOut = true
+                                settingsModal.dismiss()
                             }
                         }
                     }
@@ -627,12 +629,6 @@ struct DeleteAccountModalView: View {
                         Text("취소")
                     }
                 }
-            }
-            .alert(isPresented: $showingRestartAlert) {
-                Alert(title: Text("앱 재시작 필요"),
-                      message: Text("탈퇴 절차가 완료되었습니다. 앱을 재시작해주세요."),
-                      dismissButton: .default(Text("확인"))
-                )
             }
         }
         .accentColor(.white)
