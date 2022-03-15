@@ -58,99 +58,88 @@ struct LoginView: View {
     }
     
     var body: some View {
-        NavigationView {
-            VStack(alignment: .leading, spacing: 0) {
-                Text("studia")
-                    .font(Font.custom("Courgette Regular", size: 40))
-                    .foregroundColor(Color("ThemeColor"))
+        VStack(alignment: .leading, spacing: 0) {
+            NavigationLink(destination: CalendarView().accentColor(.white), isActive: $isLoggedIn) { EmptyView() }
+            
+            Text("studia")
+                .font(Font.custom("Courgette Regular", size: 40))
+                .foregroundColor(Color("ThemeColor"))
+            
+            Text("시작하기")
+                .font(Font.custom("NanumSquare_ac Bold", size: 50))
+                .padding(.bottom, 100)
+            
+            NavigationLink(destination: PWLoginView()) {
+                Label("이메일, 비밀번호로 로그인", systemImage: "key.fill")
+                    .font(.system(size: 17, weight: .medium))
+            }
+            .frame(minWidth: 0, maxWidth: .infinity)
+            .frame(height: 45, alignment: .center)
+            .background(Color("LoginBtnColor"))
+            .foregroundColor(Color.white)
+            .cornerRadius(10)
+            
+            Button(action: {
+                guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+                let config = GIDConfiguration(clientID: clientID)
                 
-                Text("시작하기")
-                    .font(Font.custom("NanumSquare_ac Bold", size: 50))
-                    .padding(.bottom, 50)
-                
-                //
-                /*Auth.auth().signIn(withEmail: email, password: password) {(user, error)in
-                 if(user != nil) {
-                 // Logged in
-                 self.isLoggedIn = true
-                 } else {
-                 // Login failed, show alert
-                 self.loginFailed = true
-                 }
-                 }*/
-                
-                NavigationLink(destination: PWLoginView()) {
-                    Label("이메일, 비밀번호로 로그인", systemImage: "key.fill")
-                        .font(.system(size: 17, weight: .medium))
-                }
-                .frame(minWidth: 0, maxWidth: .infinity)
-                .frame(height: 45, alignment: .center)
-                .background(Color("LoginBtnColor"))
-                .foregroundColor(Color.white)
-                .cornerRadius(10)
-                
-                Button(action: {
-                    guard let clientID = FirebaseApp.app()?.options.clientID else { return }
-                    let config = GIDConfiguration(clientID: clientID)
+                // Start Signin flow
+                GIDSignIn.sharedInstance.signIn(with: config, presenting: (UIApplication.shared.windows.first?.rootViewController)!) { user, error in
+                    if error != nil { return }
                     
-                    // Start Signin flow
-                    GIDSignIn.sharedInstance.signIn(with: config, presenting: (UIApplication.shared.windows.first?.rootViewController)!) { user, error in
+                    guard
+                        let authentication = user?.authentication,
+                        let idToken = authentication.idToken
+                    else { return }
+                    
+                    let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: authentication.accessToken)
+                    
+                    // Firebase Auth with Credential
+                    Auth.auth().signIn(with: credential) { (authResult, error) in
                         if error != nil { return }
                         
-                        guard
-                            let authentication = user?.authentication,
-                            let idToken = authentication.idToken
-                        else { return }
-                        
-                        let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: authentication.accessToken)
-                        
-                        // Firebase Auth with Credential
-                        Auth.auth().signIn(with: credential) { (authResult, error) in
-                            if error != nil { return }
-                            
-                            // Signed in successfully
-                            isLoggedIn = true
-                        }
-                    }
-                }) {
-                    Label{
-                        Text("Google로 로그인")
-                            .font(.system(size: 17, weight: .medium))
-                    } icon: {
-                        Image("google_login")
-                            .resizable()
-                            .frame(width: 17, height: 17)
+                        // Signed in successfully
+                        isLoggedIn = true
                     }
                 }
+            }) {
+                Label{
+                    Text("Google로 로그인")
+                        .font(.system(size: 17, weight: .medium))
+                } icon: {
+                    Image("google_login")
+                        .resizable()
+                        .frame(width: 17, height: 17)
+                }
+            }
+            .frame(minWidth: 0, maxWidth: .infinity)
+            .frame(height: 45, alignment: .center)
+            .background(Color("BgColor"))
+            .cornerRadius(10)
+            .foregroundColor(Color("TextColor"))
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color("ThemeColor"), lineWidth: 2)
+            )
+            .padding(.top, 5)
+            
+            SignInWithAppleButton(.signIn, onRequest: AppleIDSignInConfigure, onCompletion: AppleIDSignInHandle)
+                .signInWithAppleButtonStyle(
+                    colorScheme == .dark ? .white : .black
+                )
                 .frame(minWidth: 0, maxWidth: .infinity)
                 .frame(height: 45, alignment: .center)
-                .background(Color("BgColor"))
                 .cornerRadius(10)
-                .foregroundColor(Color("TextColor"))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color("ThemeColor"), lineWidth: 2)
-                )
                 .padding(.top, 5)
-                
-                SignInWithAppleButton(.signIn, onRequest: AppleIDSignInConfigure, onCompletion: AppleIDSignInHandle)
-                    .signInWithAppleButtonStyle(
-                        colorScheme == .dark ? .white : .black
-                    )
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .frame(height: 45, alignment: .center)
-                    .cornerRadius(10)
-                    .padding(.top, 5)
-            }
-            .frame(minWidth: 0, maxWidth: 500)
-            .padding()
-            .navigationBarHidden(true)
-            .alert(isPresented: $loginFailed) {
-                Alert(title: Text("로그인 실패"),
-                      message: Text("가입되지 않은 아이디이거나 비밀번호가 잘못되었습니다."),
-                      dismissButton: .default(Text("확인"))
-                )
-            }
+        }
+        .frame(minWidth: 0, maxWidth: 500)
+        .padding()
+        .navigationBarHidden(true)
+        .alert(isPresented: $loginFailed) {
+            Alert(title: Text("로그인 실패"),
+                  message: Text("가입되지 않은 아이디이거나 비밀번호가 잘못되었습니다."),
+                  dismissButton: .default(Text("확인"))
+            )
         }
     }
     
@@ -196,35 +185,17 @@ struct LoginView: View {
     }
 }
 
-// Navigate without NavigationView
-extension View {
-    func navigate<NewView: View>(to view: NewView, when binding: Binding<Bool>) -> some View {
-        NavigationView {
-            ZStack {
-                self
-                    .navigationBarTitle("")
-                    .navigationBarHidden(true)
-                
-                NavigationLink(
-                    destination: view
-                        .navigationBarTitle("")
-                        .navigationBarHidden(true),
-                    isActive: binding
-                ) {
-                    EmptyView()
-                }
-            }
-        }
-        .navigationViewStyle(.stack)
-    }
-}
-
 struct PWLoginView: View {
     @State private var email: String = ""           // User input for email
     @State private var password: String = ""        // User input for password
+    @State private var loading: Bool = false        // Show spinner when true
+    @State private var isLoggedIn: Bool = false     // Navigate to CalendarView when true
+    @State private var loginFailed: Bool = false    // Show "login failed" popup
     
     var body: some View {
         VStack(alignment: .leading) {
+            NavigationLink(destination: LoginFinishedView(), isActive: $isLoggedIn) { EmptyView() }
+            
             Text("이메일 주소")
                 .font(.caption)
                 .padding(.leading, 15)
@@ -278,16 +249,67 @@ struct PWLoginView: View {
                 .frame(height: 30)
             }
             .padding(10)
+            
+            Button(action: {
+                self.loading = true
+                Auth.auth().signIn(withEmail: email, password: password) {(user, error)in
+                    if(user != nil) {
+                        // Logged in
+                        self.isLoggedIn = true
+                    } else {
+                        // Login failed, show alert
+                        self.loading = false
+                        self.loginFailed = true
+                    }
+                }
+            }) {
+                if self.loading {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                } else {
+                    Text("로그인")
+                        .font(.system(size: 17, weight: .medium))
+                }
+            }
+            .frame(minWidth: 0, maxWidth: .infinity)
+            .frame(height: 45, alignment: .center)
+            .background(Color("ThemeColor"))
+            .foregroundColor(Color.white)
+            .cornerRadius(10)
         }
         .padding()
         .navigationTitle("로그인")
         .navigationBarTitleDisplayMode(.large)
+        .alert(isPresented: $loginFailed) {
+            Alert(title: Text("로그인 실패"),
+                  message: Text("가입되지 않은 아이디이거나 비밀번호가 잘못되었습니다."),
+                  dismissButton: .default(Text("확인"))
+            )
+        }
+    }
+}
+
+struct LoginFinishedView: View {
+    @State private var go: Bool = false
+    
+    var body: some View {
+        VStack {
+            NavigationLink(destination: CalendarView().accentColor(.white), isActive: $go) { EmptyView() }
+            
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle())
+        }
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
+        .onAppear {
+            self.go = true
+        }
     }
 }
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
-        LoginView()
+        NavigationView { LoginView() }
         NavigationView { PWLoginView() }
     }
 }

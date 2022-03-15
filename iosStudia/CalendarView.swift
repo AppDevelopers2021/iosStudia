@@ -69,7 +69,6 @@ struct CalendarView: View {
     }
     
     var body: some View {
-        NavigationView {
             ZStack {
                 Color("ThemeColor")
                     .edgesIgnoringSafeArea(.top)
@@ -242,6 +241,7 @@ struct CalendarView: View {
                         .padding()
                         .background(Color("BgColor"))
                         .navigationTitle("내 캘린더")
+                        .navigationBarBackButtonHidden(true)
                         .toolbar {
                             // Settings icon
                             ToolbarItem(placement: .navigationBarTrailing) {
@@ -269,9 +269,6 @@ struct CalendarView: View {
                     }
                 }
             }
-        }
-        .navigationViewStyle(StackNavigationViewStyle())
-        .accentColor(.white)
     }
 }
 

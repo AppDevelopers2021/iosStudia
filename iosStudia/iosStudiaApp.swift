@@ -19,15 +19,20 @@ struct iosStudiaApp: App {
     var body: some Scene {
         WindowGroup {
             if Auth.auth().currentUser != nil {
-                CalendarView()
+                NavigationView {
+                    CalendarView()
+                }
+                .accentColor(.white)
             } else {
-                LoginView()
-                    .onOpenURL { url in
-                        // Handle URL after Google Signin
-                        GIDSignIn.sharedInstance.handle(url)
-                    }
+                NavigationView {
+                    LoginView()
+                        .onOpenURL { url in
+                            // Handle URL after Google Signin
+                            GIDSignIn.sharedInstance.handle(url)
+                        }
+                }
+                .accentColor(.blue)
             }
-            
         }
     }
 }
