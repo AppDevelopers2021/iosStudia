@@ -1,6 +1,8 @@
 import SwiftUI
 import Firebase
 import GoogleSignIn
+import CryptoKit
+import AuthenticationServices
 
 struct Note: Identifiable {
     var id = UUID()
@@ -512,9 +514,14 @@ struct AccountModalView: View {
 
 struct DeleteAccountModalView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.colorScheme) var colorScheme
     
     @State private var password: String = ""                // Password input
     @State private var showingDeleteSheeet: Bool = false    // Show "Delete account?" action sheet
+    @State private var deleteFailed: Bool = false           // Show "Failed" popup
+    @State fileprivate var currentNonce: String?            // Nonce value for SIWA
+    
+    // Move to LoginView when finished
     @Binding var loggedOut: Bool
     @Binding var settingsModal: PresentationMode
     
@@ -546,14 +553,17 @@ struct DeleteAccountModalView: View {
                         if error == nil {
                             // Reauthenticated
                             self.showingDeleteSheeet = true
+                        } else {
+                            self.deleteFailed = true
                         }
                     }
                 }) {
-                    Text("비밀번호 인증")
+                    Label("비밀번호로 계속하기", systemImage: "key.fill")
+                        .font(.system(size: 17, weight: .medium))
                         .frame(minWidth: 0, maxWidth: .infinity)
-                        .frame(height: 40, alignment: .center)
                 }
-                .background(Color("ThemeColor"))
+                .frame(height: 45, alignment: .center)
+                .background(Color("LoginBtnColor"))
                 .foregroundColor(Color.white)
                 .cornerRadius(10)
                 .confirmationDialog(
@@ -600,14 +610,17 @@ struct DeleteAccountModalView: View {
                         }
                     }
                 }) {
-                    Image("google_login")
-                        .resizable()
-                        .frame(width: 25, height: 25)
-                    
-                    Text("Google 계정으로 인증")
+                    Label{
+                        Text("Google로 계속하기")
+                            .font(.system(size: 17, weight: .medium))
+                    } icon: {
+                        Image("google_login")
+                            .resizable()
+                            .frame(width: 17, height: 17)
+                    }
+                    .frame(minWidth: 0, maxWidth: .infinity)
                 }
-                .frame(minWidth: 0, maxWidth: .infinity)
-                .frame(height: 40, alignment: .center)
+                .frame(height: 45, alignment: .center)
                 .background(Color("BgColor"))
                 .cornerRadius(10)
                 .foregroundColor(Color("TextColor"))
@@ -616,6 +629,15 @@ struct DeleteAccountModalView: View {
                         .stroke(Color("ThemeColor"), lineWidth: 2)
                 )
                 .padding(.top, 5)
+                
+                SignInWithAppleButton(.continue, onRequest: AppleIDDeleteAccountConfigure, onCompletion: AppleIDDeleteAccountHandle)
+                    .signInWithAppleButtonStyle(
+                        colorScheme == .dark ? .white : .black
+                    )
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .frame(height: 45, alignment: .center)
+                    .cornerRadius(10)
+                    .padding(.top, 5)
             }
             .frame(minWidth: 0, maxWidth: 500)
             .padding()
@@ -630,8 +652,98 @@ struct DeleteAccountModalView: View {
                     }
                 }
             }
+            .alert(isPresented: $deleteFailed) {
+                Alert(title: Text("인증 실패"),
+                      message: Text("비밀번호가 잘못되었습니다."),
+                      dismissButton: .default(Text("확인"))
+                )
+            }
         }
         .accentColor(.white)
+    }
+    
+    private func randomNonceString(length: Int = 32) -> String {
+        precondition(length > 0)
+        let charset: [Character] = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+        var result = ""
+        var remainingLength = length
+        
+        while remainingLength > 0 {
+            let randoms: [UInt8] = (0 ..< 16).map { _ in
+                var random: UInt8 = 0
+                let errorCode = SecRandomCopyBytes(kSecRandomDefault, 1, &random)
+                if errorCode != errSecSuccess {
+                    fatalError(
+                        "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
+                    )
+                }
+                return random
+            }
+            
+            randoms.forEach { random in
+                if remainingLength == 0 {
+                    return
+                }
+                
+                if random < charset.count {
+                    result.append(charset[Int(random)])
+                    remainingLength -= 1
+                }
+            }
+        }
+        
+        return result
+    }
+    
+    private func sha256(_ input: String) -> String {
+        let inputData = Data(input.utf8)
+        let hashedData = SHA256.hash(data: inputData)
+        let hashString = hashedData.compactMap {
+            String(format: "%02x", $0)
+        }.joined()
+        
+        return hashString
+    }
+    
+    func AppleIDDeleteAccountConfigure(request: ASAuthorizationAppleIDRequest) {
+        let nonce = randomNonceString()
+        currentNonce = nonce
+        request.requestedScopes = [.email]
+        request.nonce = sha256(nonce)
+    }
+    
+    func AppleIDDeleteAccountHandle(authResult: Result<ASAuthorization, Error>) {
+        switch authResult {
+        case .success(let auth):
+            print(auth)
+            if let appleIDCredential = auth.credential as? ASAuthorizationAppleIDCredential {
+                guard let nonce = currentNonce else {
+                    fatalError("Invalid state: A login callback was received, but no login request was sent.")
+                }
+                guard let appleIDToken = appleIDCredential.identityToken else {
+                    print("Unable to fetch identity token")
+                    return
+                }
+                guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                    print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+                    return
+                }
+                // Initialize a Firebase credential.
+                let credential = OAuthProvider.credential(withProviderID: "apple.com",
+                                                          idToken: idTokenString,
+                                                          rawNonce: nonce)
+                
+                Auth.auth().currentUser?.reauthenticate(with: credential) { result, error in
+                    if error == nil {
+                        // Reauthenticated
+                        self.showingDeleteSheeet = true
+                    }
+                }
+            } else { print("error!") }
+            
+        case .failure(let error):
+            print(error)
+        }
     }
 }
 

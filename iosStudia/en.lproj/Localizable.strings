@@ -14,6 +14,10 @@
 "이메일, 비밀번호로 로그인" = "Sign in with Password";
 "Google로 로그인" = "Sign in with Google";
 "로그인" = "Sign In";
+"로그인 실패" = "Sign In Failed";
+"가입되지 않은 아이디이거나 비밀번호가 잘못되었습니다." = "Either the email or password has been incorrect.";
+"인증 실패" = "Authentication Failed";
+"비밀번호가 잘못되었습니다." = "The password is incorrect.";
 "메모" = "Memo";
 "과제 및 준비물" = "To Do";
 "내 캘린더" = "My Calendar";
@@ -42,12 +46,11 @@
 "로그아웃하시겠습니까?" = "Sign Out?";
 "회원탈퇴" = "Delete Account";
 "앱 재시작 필요" = "App Restart Required";
-"로그아웃되었습니다. 앱을 재시작해주세요." = "You are signed out. Please restart the application to continue.";
 "회원탈퇴 전에\n접근 권한을\n다시 인증해주세요." = "Reauthenticate\nBefore Deleting Your Account";
-"비밀번호 인증" = "Authenticate";
+"비밀번호로 계속하기" = "Continue with Password";
 "탈퇴하시겠습니까?" = "Delete Account?";
 "탈퇴하기" = "Delete Account";
-"Google 계정으로 인증" = "Authenticate with Google";
+"Google로 계속하기" = "Continue with Google";
 "탈퇴 절차가 완료되었습니다. 앱을 재시작해주세요." = "Your account has been deleted. Please restart the application to continue.";
 "삭제" = "Delete";
 "노트를 삭제한 후에는 되돌릴 수 없습니다." = "This action cannot be undone.";

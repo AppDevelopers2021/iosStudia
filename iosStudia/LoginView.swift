@@ -236,7 +236,7 @@ struct PWLoginView: View {
                 }) {
                     Text("계정 만들기")
                         .font(.body)
-                        .foregroundColor(Color.black)
+                        .foregroundColor(Color("TextColor"))
                 }
                 .frame(height: 30)
                 .sheet(isPresented: $showSignUpSheet) {
@@ -251,7 +251,7 @@ struct PWLoginView: View {
                 }) {
                     Text("비밀번호 찾기")
                         .font(.body)
-                        .foregroundColor(Color.black)
+                        .foregroundColor(Color("TextColor"))
                 }
                 .frame(height: 30)
                 .sheet(isPresented: $showIforgotSheet) {
